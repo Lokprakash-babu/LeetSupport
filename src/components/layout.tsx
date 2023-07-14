@@ -1,0 +1,54 @@
+import React, { CSSProperties, useMemo } from "react";
+import { Layout, Menu } from "antd";
+import Link from "next/link";
+
+const SidebarItemLink = ({ link, label }: { link: string; label: string }) => {
+  return <Link href={link}>{label}</Link>;
+};
+const SidebarMenuItems = [
+  {
+    label: <SidebarItemLink link="/practice" label="Practice" />,
+    key: "Practice",
+  },
+  {
+    label: "Learn (Coming Soon!)",
+    key: "tutorials",
+    disabled: true,
+  },
+  {
+    label: "Jobs (Coming soon!)",
+    key: "jobs",
+    disabled: true,
+  },
+  {
+    label: "Interview (Coming soon!)",
+    key: "interview",
+    disabled: true,
+  },
+];
+const AppLayout = ({ children }: { children: JSX.Element }) => {
+  const sideBarStylings: CSSProperties = useMemo(() => {
+    return {
+      overflow: "auto",
+      height: "100vh",
+      paddingTop: "24px",
+    };
+  }, []);
+  return (
+    <Layout style={{ background: "white" }}>
+      <Layout.Sider style={sideBarStylings} width={220}>
+        <Menu
+          theme="dark"
+          //   mode="inline"
+          defaultSelectedKeys={["0"]}
+          items={SidebarMenuItems}
+        />
+      </Layout.Sider>
+      <Layout.Content>
+        <Layout style={{ background: "white" }}>{children}</Layout>
+      </Layout.Content>
+    </Layout>
+  );
+};
+
+export default AppLayout;

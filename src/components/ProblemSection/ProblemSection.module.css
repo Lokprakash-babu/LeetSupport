@@ -1,0 +1,23 @@
+.problemDescriptionContainer{
+    font-size: 16px;
+    line-height: 24px;
+    margin-bottom: 1rem;
+}
+
+.sectionTitle{
+    margin-bottom: 0.25rem;
+}
+.problemCategoryContainer{
+    margin-bottom: 0.5rem
+}
+
+.problemExpectations{
+    list-style-position: inside;
+}
+
+.problemExpectations li{
+    font-size: 14px;
+    line-height: 20px;
+    color: #434343;
+    margin-bottom: 0.25rem;
+}

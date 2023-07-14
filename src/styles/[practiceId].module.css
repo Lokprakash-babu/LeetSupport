@@ -1,0 +1,12 @@
+.container{
+    display: flex;
+}
+
+.problemSection{
+    flex: 1;
+}
+
+.solutionSection{
+    flex: 1;
+}
+

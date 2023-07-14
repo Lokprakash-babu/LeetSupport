@@ -1,0 +1,15 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-leetsupport-dev-52816-authRole",
+      "UnauthRoleArn": "arn:aws:iam::276291213765:role/amplify-leetsupport-dev-52816-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::276291213765:role/amplify-leetsupport-dev-52816-authRole",
+      "Region": "ap-south-1",
+      "DeploymentBucketName": "amplify-leetsupport-dev-52816-deployment",
+      "UnauthRoleName": "amplify-leetsupport-dev-52816-unauthRole",
+      "StackName": "amplify-leetsupport-dev-52816",
+      "StackId": "arn:aws:cloudformation:ap-south-1:276291213765:stack/amplify-leetsupport-dev-52816/79f32af0-1eb4-11ee-a960-0a5f049f7d94",
+      "AmplifyAppId": "dlb0whoadxw4q"
+    }
+  }
+}

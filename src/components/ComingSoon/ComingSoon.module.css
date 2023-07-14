@@ -1,0 +1,23 @@
+.comingSoonCardContainer{
+    padding: 1rem;
+    background-color: #f5f5f5;
+    border-radius: 8px;
+    cursor: not-allowed;
+}
+.comingSoonTitle{
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.comingSoonDescription{
+    margin-bottom: 0.5rem;
+}
+
+.comingSoonText{
+
+    font-size: 12px;
+    line-height:16px;
+    color:#4f4f4f
+}

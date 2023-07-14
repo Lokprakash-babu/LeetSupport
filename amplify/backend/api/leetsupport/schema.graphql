@@ -1,0 +1,13 @@
+type SUBMISSION @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  promptId: String!
+  answer: String
+}
+
+type USER @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  email: String!
+  firstName: String
+  lastName: String
+  userName: String
+}

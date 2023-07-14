@@ -1,0 +1,16 @@
+.comingSoonCardContainer{
+    display: Flex;
+    justify-content: space-between;
+    gap: 8px;
+}
+
+.pageSectionTitle{
+    margin-bottom: 1rem;
+}
+
+
+.filterCategoryTagContainer{
+    display: flex;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+}
