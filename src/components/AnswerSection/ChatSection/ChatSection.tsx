@@ -19,12 +19,7 @@ export interface IChatMessages {
 }
 
 const ChatSection = (props: IChatSection) => {
-  const {
-    context = "You are an angry customer who didn't get proper pizza delivered. You are in conversation with support agent of that particular company, you have to keep your messages short and concise not exceeding 70 words",
-    onSubmit,
-    customerInfo,
-    initialCustomerSupportMessage = "Hello! I am Joey! How can I help you.",
-  } = props;
+  const { context, customerInfo, initialCustomerSupportMessage } = props;
   const initialChatValue: IChatMessages[] = [
     {
       role: "system",
@@ -35,7 +30,10 @@ const ChatSection = (props: IChatSection) => {
 
   return (
     <>
-      <ChatMessenger initialChatValue={initialChatValue} />
+      <ChatMessenger
+        initialChatValue={initialChatValue}
+        customerName={customerInfo.name}
+      />
     </>
   );
 };
