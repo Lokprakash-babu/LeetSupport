@@ -1,6 +1,10 @@
 .pageHeader{
-    padding: 16px;
+    padding: 1rem 2rem;
+    display: flex;
+    gap: 1rem;
+    align-items: center;
 }
 .backBtn{
     all: unset;
+    cursor: pointer;
 }

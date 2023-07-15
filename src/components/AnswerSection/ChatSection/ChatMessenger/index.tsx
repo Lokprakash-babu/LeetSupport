@@ -10,6 +10,7 @@ import ChatFeedback from "./ChatFeeback";
 
 export interface IChatMessenger {
   initialChatValue: IChatMessages[];
+  customerName: string;
 }
 
 const postTheEnteredMessge = async ({
@@ -67,7 +68,7 @@ export const ChatMessengerContext = React.createContext<IChatMessengerContext>(
   {}
 );
 
-const ChatMessenger = ({ initialChatValue }: IChatMessenger) => {
+const ChatMessenger = ({ initialChatValue, customerName }: IChatMessenger) => {
   const [chatMessages, setChatMessages] =
     useState<IChatMessages[]>(initialChatValue);
   const [isChatLoading, setChatLoading] = useState(false);
@@ -157,7 +158,7 @@ const ChatMessenger = ({ initialChatValue }: IChatMessenger) => {
         <div className={`${styles.chatContainer}`}>
           <div className={styles.chatHeader}>
             <div className={styles.chatHeaderTitle}>
-              <h4>Test customer name</h4>
+              <h4>{customerName}</h4>
               <Button danger onClick={terminateChat}>
                 End Chat
               </Button>
