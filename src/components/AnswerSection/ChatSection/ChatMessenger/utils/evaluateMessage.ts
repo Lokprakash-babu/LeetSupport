@@ -37,7 +37,7 @@ export const evaluateMessage = async({
 
 
 export const LanguageProficiencyAssessement = async(chatMessages: IChatMessages[]) => {
-    const languageEvaluationPrompt = "You are a customer support manager, evaluate the language proficiency for the messages in first person view. Provide feedback for improvement"
+    const languageEvaluationPrompt = "You are a customer support manager, evaluate the language proficiency for the messages in first person view. Provide feedback for improvement. Keep it brief not exceeding 200 words"
 
     const response = await evaluateMessage({
         allMessages: chatMessages,
@@ -47,7 +47,7 @@ export const LanguageProficiencyAssessement = async(chatMessages: IChatMessages[
 }
 
 export const ToneProficiencyAnalysis = async(chatMessages: IChatMessages[]) => {
-    const languageEvaluationPrompt = "You are a customer support manager, evaluate the tone for the messages in first person view. Provide feedback for improvement";
+    const languageEvaluationPrompt = "You are a customer support manager, evaluate the tone for the messages in first person view. Provide feedback for improvement. Keep it brief not exceeding 200 words";
 
     const response = await evaluateMessage({
         allMessages: chatMessages,
@@ -56,7 +56,7 @@ export const ToneProficiencyAnalysis = async(chatMessages: IChatMessages[]) => {
     return response;
 }
 export const OverallFeedbackProficiency = async(chatMessages: IChatMessages[]) => {
-    const languageEvaluationPrompt = "You are a customer support manager, evaluate the overall feedback for the messages in first person view. Provide feedback for improvement"
+    const languageEvaluationPrompt = "You are a customer support manager, evaluate the overall feedback for the messages in first person view. Provide feedback for improvement. Keep it brief not exceeding 200 words"
 
     const response = await evaluateMessage({
         allMessages: chatMessages,
