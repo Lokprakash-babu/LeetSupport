@@ -1,5 +1,7 @@
+import EmailEditor from "./EmailEditor";
+
 const EmailSection = () => {
-  return <div>EmailSection</div>;
+  return <EmailEditor />;
 };
 
 export default EmailSection;
