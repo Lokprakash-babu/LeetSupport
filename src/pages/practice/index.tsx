@@ -25,7 +25,9 @@ const practiceTableColumn = [
     title: "Title",
     dataIndex: "title",
     key: "title",
-    render: (text: string) => <Link href={"/practice/1"}>{text}</Link>,
+    render: (props: { text: string; link: string }) => (
+      <Link href={`/practice/${props.link}`}>{props.text}</Link>
+    ),
   },
   {
     title: "Category",
@@ -56,7 +58,10 @@ const practiceTableColumn = [
 const practiceProblems = [
   {
     key: "1",
-    title: "Chat Specialist and Pizza!",
+    title: {
+      text: "Chat Specialist and Pizza!",
+      link: "chat-specialist-and-pizza",
+    },
     category: {
       text: "chat",
       category: "chat",
@@ -66,7 +71,10 @@ const practiceProblems = [
   },
   {
     key: "2",
-    title: "Support person and tech Problems",
+    title: {
+      text: "Support person and tech Problems",
+      link: "support-person-and-tech",
+    },
     category: {
       text: "Email",
       category: "email",
@@ -76,7 +84,10 @@ const practiceProblems = [
   },
   {
     key: "3",
-    title: "Sales and difficult customer",
+    title: {
+      text: "Sales and difficult customer",
+      link: "sales-and-difficult-customer",
+    },
     category: {
       text: "Sales",
       category: "sales",

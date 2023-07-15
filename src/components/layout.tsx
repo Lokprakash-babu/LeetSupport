@@ -35,12 +35,11 @@ const AppLayout = ({ children }: { children: JSX.Element }) => {
     };
   }, []);
   return (
-    <Layout style={{ background: "white" }}>
+    <Layout style={{ background: "white" }} hasSider>
       <Layout.Sider style={sideBarStylings} width={220}>
         <Menu
           theme="dark"
-          //   mode="inline"
-          defaultSelectedKeys={["0"]}
+          defaultSelectedKeys={["Practice"]}
           items={SidebarMenuItems}
         />
       </Layout.Sider>
