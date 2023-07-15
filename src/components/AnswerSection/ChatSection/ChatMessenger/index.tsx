@@ -130,6 +130,7 @@ const ChatMessenger = ({ initialChatValue }: IChatMessenger) => {
 
   const resetChat = () => {
     setChatMessages(initialChatValue);
+    setUserTypedMessage("");
     initiateChat({
       initialChatValue: initialChatValue,
       beforeInitiate() {
