@@ -5,6 +5,7 @@ import { useRouter } from "next/router";
 import styles from "@styles/[practiceId].module.css";
 import ChatSection from "@/components/AnswerSection/ChatSection/ChatSection";
 import NotFound from "@/components/NotFound/NotFound";
+import EmailSection from "@/components/AnswerSection/EmailSection/EmailSection";
 const problem = {
   "chat-specialist-and-pizza": {
     key: "1",
@@ -31,6 +32,27 @@ const problem = {
       name: "Honest customer",
     },
   },
+  "support-person-and-tech-problems": {
+    key: "1",
+    title: "Support Person and Tech Problems",
+    category: {
+      text: "email",
+      category: "email",
+    },
+    difficulty: "Medium",
+    problemDescription:
+      "I am extremely frustrated and facing a major obstacle for my business! I signed up on your portal, received the activation email, and even set my password. But guess what? I still can't log in! This is causing significant disruption and hindering my progress. The login email I used is hello@login.com. I need urgent assistance to resolve this issue and regain access to my account.",
+    expectations: [
+      "As a customer support agent, reply to the customer in an email describing the issue and the solution.",
+      "Keep the mail short and concise.",
+      "Number of character should be within 250 - 500 characters, inclusively",
+    ],
+    context: "",
+    initialSupportMessage: "",
+    customerInfo: {
+      name: "",
+    },
+  },
 };
 
 const AnswerContainer = (props: { problem: any }) => {
@@ -45,6 +67,8 @@ const AnswerContainer = (props: { problem: any }) => {
           customerInfo={problem.customerInfo}
         />
       );
+    case "email":
+      return <EmailSection />;
     default:
       return <></>;
   }
@@ -71,7 +95,7 @@ const PracticeDetails = () => {
               category={practiceProblem.category.category}
               companiesAskedIn={["Amazon"]}
               description={practiceProblem.problemDescription}
-              difficulty="Easy"
+              difficulty={practiceProblem.difficulty}
               expectations={practiceProblem.expectations}
             />
           </div>

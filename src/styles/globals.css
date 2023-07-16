@@ -11,27 +11,30 @@ body {
   background: white;
 }
 
-.text-pageHeader{
+.text-pageHeader {
   font-size: 14px;
-  line-height:21px;
+  line-height: 21px;
   font-weight: 700;
 }
 
-
-.text-title{
+.text-title {
   font-size: 20px;
   line-height: 30px;
   font-weight: 500;
 }
 
-.text-description{
+.text-description {
   font-size: 16px;
   line-height: 24px;
   font-weight: 400;
 }
 
-.text-pageSection{
+.text-pageSection {
   font-size: 24px;
   line-height: 36px;
   font-weight: 500;
+}
+
+.ql-container {
+  height: 60vh !important;
 }

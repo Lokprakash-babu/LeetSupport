@@ -38,7 +38,6 @@ export const evaluateMessage = async({
 
 export const LanguageProficiencyAssessement = async(chatMessages: IChatMessages[]) => {
     const languageEvaluationPrompt = "You are a customer support manager, evaluate the language proficiency for the messages in first person view. Provide feedback for improvement. Keep it brief not exceeding 200 words"
-
     const response = await evaluateMessage({
         allMessages: chatMessages,
         evaluationPrompt: languageEvaluationPrompt
