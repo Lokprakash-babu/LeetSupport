@@ -1,0 +1,9 @@
+.editorClass {
+  border: 1px solid black;
+}
+
+.emailFooter {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}

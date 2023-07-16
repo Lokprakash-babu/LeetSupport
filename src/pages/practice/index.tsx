@@ -73,7 +73,7 @@ const practiceProblems = [
     key: "2",
     title: {
       text: "Support person and tech Problems",
-      link: "support-person-and-tech",
+      link: "support-person-and-tech-problems",
     },
     category: {
       text: "Email",

@@ -1,12 +1,12 @@
-.container{
-    display: flex;
+.container {
+  display: flex;
 }
 
-.problemSection{
-    flex: 1;
+.problemSection {
+  flex: 1;
 }
 
-.solutionSection{
-    flex: 1;
+.solutionSection {
+  flex: 1;
+  max-width: 50% !important;
 }
-
