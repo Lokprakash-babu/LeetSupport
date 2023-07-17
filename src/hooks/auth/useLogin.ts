@@ -1,17 +1,13 @@
 import { Auth } from "aws-amplify";
 
 export interface ILogIn {
-  username: string;
+  email: string;
   password: string;
 }
 
-const userSignIn = async ({ username, password }: ILogIn) => {
-  try {
-    const { user } = await Auth.signIn({ username, password });
-    console.log(user);
-  } catch (error) {
-    console.log("error signing in:", error);
-  }
+const userSignIn = async ({ email, password }: ILogIn) => {
+  const { user } = await Auth.signIn({ username: email, password });
+  return user;
 };
 
 export const useLogin = () => {

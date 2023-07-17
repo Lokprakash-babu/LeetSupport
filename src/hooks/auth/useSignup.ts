@@ -43,6 +43,7 @@ export async function confirmSignUp({
     console.log("error confirming sign up", error);
   }
 }
+
 export const useSignup = () => {
   return {
     userSignUp,

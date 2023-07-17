@@ -7,9 +7,7 @@ export interface IAuthFooter {
   onRegisterClick: () => any;
   onLoginClick: () => any;
 }
-const AuthFooter = ({}) => {
-  return;
-};
+
 const Auth = () => {
   const [showLogin, setShowLogin] = useState(true);
 

@@ -1,7 +1,7 @@
 import React, { CSSProperties, useMemo } from "react";
 import { Layout, Menu } from "antd";
 import Link from "next/link";
-
+import { Toaster } from "react-hot-toast";
 const SidebarItemLink = ({ link, label }: { link: string; label: string }) => {
   return <Link href={link}>{label}</Link>;
 };
@@ -36,6 +36,8 @@ const AppLayout = ({ children }: { children: JSX.Element }) => {
   }, []);
   return (
     <Layout style={{ background: "white" }} hasSider>
+      <Toaster position="top-right" />
+
       <Layout.Sider style={sideBarStylings} width={220}>
         <Menu
           theme="dark"

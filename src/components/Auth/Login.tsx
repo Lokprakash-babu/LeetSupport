@@ -10,9 +10,16 @@ export interface ILogin {
 const Login = ({ onSignupClick }: ILogin) => {
   const { userSignIn } = useLogin();
   const [isLoading, setIsLoading] = useState(false);
-  const loginUser = async (values: { username: string; password: string }) => {
+  const [error, setError] = useState("");
+  const loginUser = async (values: { email: string; password: string }) => {
     setIsLoading(true);
-    await userSignIn({ ...values });
+    try {
+      await userSignIn({ ...values });
+      setError("");
+    } catch (error: any) {
+      setIsLoading(false);
+      setError(error.message);
+    }
     setIsLoading(false);
   };
   const [forgotPassword, setForgotPassword] = useState(false);
@@ -35,8 +42,11 @@ const Login = ({ onSignupClick }: ILogin) => {
         layout="vertical"
       >
         <div className={styles.loginHeaderContainer}>
-          <h2>Login</h2>
-          <p>Welcome back!</p>
+          <div>
+            <h2>Login</h2>
+            <p>Welcome back!</p>
+          </div>
+          {error && <div className={styles.error}>{error}</div>}
         </div>
         <Form.Item
           name="email"
@@ -68,7 +78,10 @@ const Login = ({ onSignupClick }: ILogin) => {
           <Button
             type="link"
             className={styles.forgotPassword}
-            onClick={() => setForgotPassword(true)}
+            onClick={() => {
+              setError("");
+              setForgotPassword(true);
+            }}
           >
             Forgot password
           </Button>
@@ -91,7 +104,10 @@ const Login = ({ onSignupClick }: ILogin) => {
           Don&apos;t have an account Yet?{" "}
           <Button
             type="link"
-            onClick={onSignupClick}
+            onClick={() => {
+              onSignupClick();
+              setError("");
+            }}
             className={styles.backIngressBtn}
           >
             Sign Up!
