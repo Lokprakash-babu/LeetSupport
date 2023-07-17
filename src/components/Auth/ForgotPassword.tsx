@@ -1,7 +1,7 @@
 import { Button, Form, Input } from "antd";
 import { useState } from "react";
 import styles from "./auth.module.css";
-import { useAuth } from "@/hooks/auth/useAuth";
+import { useAuth } from ".";
 
 const VerificationCode = ({
   email,
@@ -13,27 +13,32 @@ const VerificationCode = ({
   changeEmail: () => void;
 }) => {
   const [isLoading, setIsLoading] = useState(false);
-  const { forgotPasswordSubmit } = useAuth();
   const [showGoBackToLogin, setShowGoBackToLogin] = useState(false);
+  const { forgotPasswordCodeSubmit } = useAuth();
+  const [error, setError] = useState("");
   const submitForgotPassword = async (values: {
     code: string;
     newPassword: string;
   }) => {
     setIsLoading(true);
 
-    const response = await forgotPasswordSubmit({
-      code: values.code,
-      newPassword: values.newPassword,
-      email: email,
-    });
-    console.log("response", response);
-    setIsLoading(false);
-    setShowGoBackToLogin(true);
+    try {
+      const response = await forgotPasswordCodeSubmit?.({
+        code: values.code,
+        newPassword: values.newPassword,
+        email: email,
+      });
+      setIsLoading(false);
+      setShowGoBackToLogin(true);
+    } catch (err: any) {
+      setIsLoading(false);
+      setError(err.message);
+    }
   };
 
   if (showGoBackToLogin) {
     return (
-      <div>
+      <div className={styles.goBackToLoginForgot}>
         <h3>Password updated successfully</h3>
         <Button onClick={goBackToLogin} type="link">
           Login!
@@ -58,6 +63,7 @@ const VerificationCode = ({
               Change Email
             </Button>
           </div>
+          {error && <div className={styles.error}>{error}</div>}
         </div>
         <Form.Item
           name="code"
@@ -70,7 +76,7 @@ const VerificationCode = ({
           ]}
           className={`${styles.inputContainer} ${styles.emailInputContainer}`}
         >
-          <Input placeholder="hello@email.com" />
+          <Input placeholder="123456" />
         </Form.Item>
         <Form.Item
           name="newPassword"
@@ -83,7 +89,7 @@ const VerificationCode = ({
           ]}
           className={`${styles.inputContainer} ${styles.emailInputContainer}`}
         >
-          <Input.Password placeholder="1234455" />
+          <Input.Password placeholder="**********" />
         </Form.Item>
         <Form.Item>
           <Button type="primary" htmlType="submit" loading={isLoading}>
@@ -97,14 +103,13 @@ const VerificationCode = ({
 const ForgotPassword = ({ goBackToLogin }: { goBackToLogin: () => void }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [email, setEmail] = useState("");
-  const { triggerForgotPassword } = useAuth();
   const [showVerificationCode, setShowVerificationCode] = useState(false);
+  const { forgotPasswordEmailSubmit } = useAuth();
   const sendVerificationCode = async (email: string) => {
     setIsLoading(true);
-    const triggerForgetPasswordResponse = await triggerForgotPassword(email);
+    await forgotPasswordEmailSubmit?.(email);
     setIsLoading(false);
     setShowVerificationCode(true);
-    console.log(triggerForgetPasswordResponse);
   };
 
   if (showVerificationCode) {
@@ -139,7 +144,7 @@ const ForgotPassword = ({ goBackToLogin }: { goBackToLogin: () => void }) => {
           rules={[
             {
               required: true,
-              message: "Please enter your username",
+              message: "Please enter your email",
             },
           ]}
           className={`${styles.inputContainer} ${styles.emailInputContainer}`}

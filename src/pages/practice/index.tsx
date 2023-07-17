@@ -6,15 +6,14 @@ import RenderPracticeChip, {
   practiceCategory,
 } from "@/components/RenderPracticeChip";
 import { Table } from "antd";
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import styles from "@styles/practice.module.css";
 import PageWrapper from "@/components/PageWrapper/PageWrapper";
 import Companies from "@/components/CompaniesTag";
-import FilterTag, { IFilterTag } from "@/components/FilterTag/FilterTag";
+import FilterTag from "@/components/FilterTag/FilterTag";
 import Link from "next/link";
-import { useAuth } from "@/hooks/auth/useAuth";
-import { useRouter } from "next/router";
 import Unauthenticated from "@/components/Unauthenticated";
+import { useAuth } from "@/components/Auth";
 interface DataType {
   key: string;
   name: string;
@@ -120,7 +119,13 @@ const comingSoonInfo: IComingSoonCard[] = [
 
 const Practice = () => {
   const [activeFilterTag, setActiveFilterTag] = useState("all");
-  const { userLoggedIn, checkAuthStatus } = useAuth();
+  const {
+    authenticatedUser,
+    isUserLoggedIn,
+    authLoading,
+    setAuthenticatedUser,
+    setAuthLoading,
+  } = useAuth();
 
   const FilterTagConfig = [
     {
@@ -157,9 +162,12 @@ const Practice = () => {
   ];
 
   const whoAmI = async () => {
-    console.log("who am I started");
-    const response = await checkAuthStatus();
-    console.log("who am I finished", response);
+    try {
+      await isUserLoggedIn?.();
+    } catch (e) {
+      setAuthenticatedUser?.(null);
+      setAuthLoading?.(false);
+    }
   };
 
   useEffect(() => {
@@ -173,12 +181,11 @@ const Practice = () => {
         );
   }, [activeFilterTag]);
 
-  if (userLoggedIn.loading) {
+  if (authLoading) {
     return <p>Loading...</p>;
   }
 
-  console.log("loggedin user", userLoggedIn);
-  if (!userLoggedIn.user && !userLoggedIn.loading) {
+  if (!authenticatedUser?.username && !authLoading) {
     return <Unauthenticated />;
   }
   return (

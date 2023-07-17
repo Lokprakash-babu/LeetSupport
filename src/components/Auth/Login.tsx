@@ -1,21 +1,23 @@
 import { Form, Input, Button } from "antd";
 import styles from "./auth.module.css";
-import { useLogin } from "@/hooks/auth/useLogin";
 import { useState } from "react";
 import ForgotPassword from "./ForgotPassword";
+import { useAuth } from ".";
 
 export interface ILogin {
   onSignupClick: () => void;
   onLoginSuccess: () => void;
 }
 const Login = ({ onSignupClick, onLoginSuccess }: ILogin) => {
-  const { userSignIn } = useLogin();
+  const { signIn } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
+  const [forgotPassword, setForgotPassword] = useState(false);
+
   const loginUser = async (values: { email: string; password: string }) => {
     setIsLoading(true);
     try {
-      await userSignIn({ ...values });
+      await signIn?.({ ...values });
       setError("");
       onLoginSuccess();
     } catch (error: any) {
@@ -24,8 +26,6 @@ const Login = ({ onSignupClick, onLoginSuccess }: ILogin) => {
     }
     setIsLoading(false);
   };
-  const [forgotPassword, setForgotPassword] = useState(false);
-
   if (forgotPassword) {
     return (
       <ForgotPassword
@@ -56,7 +56,7 @@ const Login = ({ onSignupClick, onLoginSuccess }: ILogin) => {
           rules={[
             {
               required: true,
-              message: "Please enter your username",
+              message: "Please enter your email",
             },
           ]}
           className={`${styles.inputContainer} ${styles.emailInputContainer}`}

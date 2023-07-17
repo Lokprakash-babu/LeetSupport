@@ -1,23 +1,19 @@
 import { Form, Input, Button } from "antd";
 import styles from "./auth.module.css";
-import { useSignup } from "@/hooks/auth/useSignup";
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { useLogin } from "@/hooks/auth/useLogin";
 import { useRouter } from "next/router";
+import { useAuth } from ".";
 const Signup = ({ onLoginClick }: { onLoginClick: () => any }) => {
-  const { userSignUp, confirmSignUp, resendConfirmationCode } = useSignup();
-  const { userSignIn } = useLogin();
-  const [isLoading, setIsLoading] = useState(false);
+  const { signUp, confirmSignUp, signIn, resendConfirmationCode, authLoading } =
+    useAuth();
   const [showVerificationCode, setShowVerificationCode] = useState({
     email: "",
   });
   const [password, setPassword] = useState("");
   const SignupUser = async (value: any) => {
-    setIsLoading(true);
     setPassword(value.password);
-    await userSignUp({ ...value });
-    setIsLoading(false);
+    await signUp?.({ ...value });
     setShowVerificationCode({
       email: value.email,
     });
@@ -25,24 +21,20 @@ const Signup = ({ onLoginClick }: { onLoginClick: () => any }) => {
 
   const router = useRouter();
   const confirmUser = async (value: any) => {
-    setIsLoading(true);
-    await confirmSignUp({
+    await confirmSignUp?.({
       username: showVerificationCode.email,
       code: value.verificationCode,
     });
     await signInUser();
     router.replace("/practice");
-    setIsLoading(false);
   };
 
   const resendVerificationCode = async () => {
-    setIsLoading(true);
-    await resendConfirmationCode(showVerificationCode.email);
-    setIsLoading(false);
+    await resendConfirmationCode?.(showVerificationCode.email);
   };
 
   const signInUser = async () => {
-    await userSignIn({ password, username: showVerificationCode.email });
+    await signIn?.({ password, email: showVerificationCode.email });
   };
   return (
     <>
@@ -70,7 +62,7 @@ const Signup = ({ onLoginClick }: { onLoginClick: () => any }) => {
             className={styles.formContainer}
             onFinish={confirmUser}
             layout="vertical"
-            disabled={isLoading}
+            disabled={authLoading}
           >
             <Form.Item
               name="verificationCode"
@@ -90,7 +82,7 @@ const Signup = ({ onLoginClick }: { onLoginClick: () => any }) => {
               <Button
                 type="link"
                 onClick={resendVerificationCode}
-                loading={isLoading}
+                loading={authLoading}
               >
                 Resend Code
               </Button>
@@ -100,7 +92,7 @@ const Signup = ({ onLoginClick }: { onLoginClick: () => any }) => {
                 type="primary"
                 htmlType="submit"
                 className={styles.nextBtn}
-                loading={isLoading}
+                loading={authLoading}
               >
                 Verify!
               </Button>
@@ -121,7 +113,7 @@ const Signup = ({ onLoginClick }: { onLoginClick: () => any }) => {
             className={styles.formContainer}
             onFinish={SignupUser}
             layout="vertical"
-            disabled={isLoading}
+            disabled={authLoading}
           >
             <Form.Item
               name="email"
@@ -154,7 +146,7 @@ const Signup = ({ onLoginClick }: { onLoginClick: () => any }) => {
                 type="primary"
                 htmlType="submit"
                 className={styles.btnContainer}
-                loading={isLoading}
+                loading={authLoading}
               >
                 Sign up!
               </Button>

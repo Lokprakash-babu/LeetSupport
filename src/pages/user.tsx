@@ -1,24 +1,35 @@
+import { useAuth } from "@/components/Auth";
 import Auth from "@/components/Auth/Auth";
 import styles from "@styles/user.module.css";
-import Image from "next/image";
-const benefitPoints = [
-  {
-    key: 1,
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 
-    children: "Join the community",
-  },
-  {
-    key: 2,
-
-    children: "Experience and practise the Chat and Email conversation",
-  },
-  {
-    key: 3,
-
-    children: "Excel in your role as a customer support representative",
-  },
-];
 const User = () => {
+  const { isUserLoggedIn, authenticatedUser, setAuthenticatedUser } = useAuth();
+  const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
+  const whoAmI = async () => {
+    try {
+      setIsLoading(true);
+      await isUserLoggedIn?.();
+      setIsLoading?.(false);
+    } catch (err) {
+      setIsLoading?.(false);
+      setAuthenticatedUser?.(null);
+    }
+  };
+
+  useEffect(() => {
+    whoAmI();
+  }, []);
+
+  if (isLoading) {
+    return <p>Loading...</p>;
+  }
+  if (authenticatedUser?.username && !isLoading) {
+    router.replace("/practice");
+    return null;
+  }
   return (
     <div className={styles.userContainer}>
       <div className={`${styles.leftSection}`}></div>
@@ -27,10 +38,6 @@ const User = () => {
       </div>
     </div>
   );
-};
-
-User.getLayout = function getLayout(page: React.ReactNode) {
-  return <>{page}</>;
 };
 
 export default User;
