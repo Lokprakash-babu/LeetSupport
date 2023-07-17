@@ -120,7 +120,7 @@ const comingSoonInfo: IComingSoonCard[] = [
 
 const Practice = () => {
   const [activeFilterTag, setActiveFilterTag] = useState("all");
-  const { userLoggedIn } = useAuth();
+  const { userLoggedIn, checkAuthStatus } = useAuth();
 
   const FilterTagConfig = [
     {
@@ -156,6 +156,15 @@ const Practice = () => {
     },
   ];
 
+  const whoAmI = async () => {
+    console.log("who am I started");
+    const response = await checkAuthStatus();
+    console.log("who am I finished", response);
+  };
+
+  useEffect(() => {
+    whoAmI();
+  }, []);
   const problemsSet = useMemo(() => {
     return activeFilterTag === "all"
       ? practiceProblems
@@ -163,11 +172,13 @@ const Practice = () => {
           (problem) => problem.category.category === activeFilterTag
         );
   }, [activeFilterTag]);
-  if (!userLoggedIn.loading) {
+
+  if (userLoggedIn.loading) {
     return <p>Loading...</p>;
   }
 
-  if (!userLoggedIn.user) {
+  console.log("loggedin user", userLoggedIn);
+  if (!userLoggedIn.user && !userLoggedIn.loading) {
     return <Unauthenticated />;
   }
   return (

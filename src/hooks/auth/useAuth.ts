@@ -1,6 +1,6 @@
 import { Auth } from "aws-amplify";
 import awsConfig from "../../aws-exports";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 Auth.configure(awsConfig);
 
 const isUserLoggedIn = async () => {
@@ -19,16 +19,14 @@ export const useAuth = () => {
       loading: true,
     });
     const authResponse = await isUserLoggedIn();
-    console.log("auth response", authResponse);
+
     setUserLoggedIn({
       loading: false,
       signedIn: true,
       user: authResponse,
     });
+    return authResponse;
   };
-  useEffect(() => {
-    checkAuthStatus();
-  }, []);
 
   const triggerForgotPassword = async (email: string) => {
     const forgotPasswordResponse = await Auth.forgotPassword(email);
@@ -52,9 +50,12 @@ export const useAuth = () => {
     return newPasswordResponse;
   };
 
+  console.log("use Auth", userLoggedIn);
+
   return {
     userLoggedIn,
     triggerForgotPassword,
     forgotPasswordSubmit,
+    checkAuthStatus,
   };
 };

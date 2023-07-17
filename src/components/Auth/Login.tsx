@@ -6,8 +6,9 @@ import ForgotPassword from "./ForgotPassword";
 
 export interface ILogin {
   onSignupClick: () => void;
+  onLoginSuccess: () => void;
 }
-const Login = ({ onSignupClick }: ILogin) => {
+const Login = ({ onSignupClick, onLoginSuccess }: ILogin) => {
   const { userSignIn } = useLogin();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
@@ -16,6 +17,7 @@ const Login = ({ onSignupClick }: ILogin) => {
     try {
       await userSignIn({ ...values });
       setError("");
+      onLoginSuccess();
     } catch (error: any) {
       setIsLoading(false);
       setError(error.message);
