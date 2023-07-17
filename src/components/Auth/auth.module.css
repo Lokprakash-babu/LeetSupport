@@ -1,0 +1,91 @@
+/* .authContainer {
+  padding: 1rem;
+  border: 1px solid #f0f0f0;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+} */
+
+.formContainer {
+  display: flex;
+  flex-direction: column;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  align-items: center;
+}
+
+.authFooter {
+  display: flex;
+  gap: 0.25rem;
+  align-items: center;
+}
+
+.joinUsContainer {
+  padding: 1rem;
+  text-align: center;
+}
+
+.joinUsContainer > h2 {
+  margin-bottom: 0.25rem;
+}
+
+.joinUsContainer > p {
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.verificationEmailContainer {
+  border: 1px solid #f0f0f0;
+  border-radius: 8px;
+  padding: 1rem;
+  font-size: 16px;
+  line-height: 24px;
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.loginHeaderContainer {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.inputContainer {
+  margin-bottom: 0;
+  width: 340px;
+}
+
+.emailInputContainer {
+  margin-bottom: 1.5rem;
+}
+
+.forgotPasswordContainer {
+  width: 340px;
+  display: flex;
+  flex-direction: row-reverse;
+}
+.forgotPassword {
+  margin-bottom: 1rem;
+  padding-right: 0;
+}
+
+.signupContainer {
+  display: flex;
+  justify-content: center;
+}
+
+.proceedBtnContainer {
+  /* width: 340px; */
+  display: flex;
+  justify-content: center;
+}
+.btnContainer {
+  width: 340px;
+  margin-bottom: 0.25rem;
+}
+
+.backIngressBtn {
+  padding-left: 0px;
+}
+
+.marginAddition {
+  margin-bottom: 1.5rem;
+}

@@ -1,0 +1,24 @@
+.userContainer {
+  height: 100vh;
+  display: flex;
+}
+
+.leftSection {
+  height: 100%;
+  position: relative;
+  width: 40%;
+  max-width: 800px;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+
+  background-image: url("../../public/signup.jpg");
+}
+
+.rightSection {
+  height: 100%;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}

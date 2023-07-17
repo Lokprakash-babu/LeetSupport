@@ -12,6 +12,9 @@ import PageWrapper from "@/components/PageWrapper/PageWrapper";
 import Companies from "@/components/CompaniesTag";
 import FilterTag, { IFilterTag } from "@/components/FilterTag/FilterTag";
 import Link from "next/link";
+import { useAuth } from "@/hooks/auth/useAuth";
+import { useRouter } from "next/router";
+import Unauthenticated from "@/components/Unauthenticated";
 interface DataType {
   key: string;
   name: string;
@@ -117,6 +120,8 @@ const comingSoonInfo: IComingSoonCard[] = [
 
 const Practice = () => {
   const [activeFilterTag, setActiveFilterTag] = useState("all");
+  const { userLoggedIn } = useAuth();
+
   const FilterTagConfig = [
     {
       filterText: "All",
@@ -158,6 +163,13 @@ const Practice = () => {
           (problem) => problem.category.category === activeFilterTag
         );
   }, [activeFilterTag]);
+  if (!userLoggedIn.loading) {
+    return <p>Loading...</p>;
+  }
+
+  if (!userLoggedIn.user) {
+    return <Unauthenticated />;
+  }
   return (
     <>
       <PageHead pageName="Practice" />
