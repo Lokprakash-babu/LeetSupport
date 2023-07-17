@@ -6,12 +6,14 @@ import RenderPracticeChip, {
   practiceCategory,
 } from "@/components/RenderPracticeChip";
 import { Table } from "antd";
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import styles from "@styles/practice.module.css";
 import PageWrapper from "@/components/PageWrapper/PageWrapper";
 import Companies from "@/components/CompaniesTag";
-import FilterTag, { IFilterTag } from "@/components/FilterTag/FilterTag";
+import FilterTag from "@/components/FilterTag/FilterTag";
 import Link from "next/link";
+import Unauthenticated from "@/components/Unauthenticated";
+import { useAuth } from "@/components/Auth";
 interface DataType {
   key: string;
   name: string;
@@ -117,6 +119,14 @@ const comingSoonInfo: IComingSoonCard[] = [
 
 const Practice = () => {
   const [activeFilterTag, setActiveFilterTag] = useState("all");
+  const {
+    authenticatedUser,
+    isUserLoggedIn,
+    authLoading,
+    setAuthenticatedUser,
+    setAuthLoading,
+  } = useAuth();
+
   const FilterTagConfig = [
     {
       filterText: "All",
@@ -151,6 +161,18 @@ const Practice = () => {
     },
   ];
 
+  const whoAmI = async () => {
+    try {
+      await isUserLoggedIn?.();
+    } catch (e) {
+      setAuthenticatedUser?.(null);
+      setAuthLoading?.(false);
+    }
+  };
+
+  useEffect(() => {
+    whoAmI();
+  }, []);
   const problemsSet = useMemo(() => {
     return activeFilterTag === "all"
       ? practiceProblems
@@ -158,6 +180,14 @@ const Practice = () => {
           (problem) => problem.category.category === activeFilterTag
         );
   }, [activeFilterTag]);
+
+  if (authLoading) {
+    return <p>Loading...</p>;
+  }
+
+  if (!authenticatedUser?.username && !authLoading) {
+    return <Unauthenticated />;
+  }
   return (
     <>
       <PageHead pageName="Practice" />
