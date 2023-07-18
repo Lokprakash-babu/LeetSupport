@@ -6,6 +6,7 @@ import styles from "@styles/[practiceId].module.css";
 import ChatSection from "@/components/AnswerSection/ChatSection/ChatSection";
 import NotFound from "@/components/NotFound/NotFound";
 import EmailSection from "@/components/AnswerSection/EmailSection/EmailSection";
+import { useAuth } from "@/components/Auth";
 const problem = {
   "chat-specialist-and-pizza": {
     key: "1",

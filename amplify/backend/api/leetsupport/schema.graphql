@@ -1,0 +1,9 @@
+type SUBMISSION @model @auth(rules: [{ allow: owner }]) {
+  id: ID!
+  problemId: String!
+  user: String!
+  response: String!
+  languageFeedback: String
+  toneFeedback: String
+  overallFeedback: String
+}
