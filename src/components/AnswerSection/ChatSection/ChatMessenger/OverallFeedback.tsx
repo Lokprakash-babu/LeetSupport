@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { ChatMessengerContext } from ".";
 import { IChatMessages } from "../ChatSection";
 import FeedbackLoader from "./FeedbackLoader";
-import { OverallFeedbackProficiency } from "./utils/evaluateMessage";
+import { OverallFeedbackProficiency } from "../../../../utils/evaluateMessage";
 
 const OverallFeedback = () => {
   const { chatMessages } = useContext(ChatMessengerContext);

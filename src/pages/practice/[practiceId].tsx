@@ -7,10 +7,19 @@ import ChatSection from "@/components/AnswerSection/ChatSection/ChatSection";
 import NotFound from "@/components/NotFound/NotFound";
 import EmailSection from "@/components/AnswerSection/EmailSection/EmailSection";
 import { useAuth } from "@/components/Auth";
+import { Tabs } from "antd";
+import { useSidebarContext } from "@/components/Sidebar";
+import { useEffect, useState } from "react";
+import { emailSubmissionHandler } from "@/utils/emailSubmissionHandler";
+import Error from "@/components/Error";
+import SubmissionSummary from "@/components/Submission/SubmissionSummary";
+import { listSubmissionBasedOnUser } from "@/utils/gqlApi";
+
 const problem = {
   "chat-specialist-and-pizza": {
     key: "1",
     title: "Chat Specialist and Pizza!",
+    id: "chat-specialist-and-pizza",
     category: {
       text: "chat",
       category: "chat",
@@ -36,6 +45,7 @@ const problem = {
   "support-person-and-tech-problems": {
     key: "1",
     title: "Support Person and Tech Problems",
+    id: "support-person-and-tech-problems",
     category: {
       text: "email",
       category: "email",
@@ -56,9 +66,52 @@ const problem = {
   },
 };
 
-const AnswerContainer = (props: { problem: any }) => {
+export interface ISubmissionHandler {
+  chat?: string;
+  email?: {
+    formattedContent: string;
+    unFormattedContent: string;
+  };
+}
+const AnswerContainer = (props: {
+  problem: any;
+  setSubmissionId: (id: string) => void;
+}) => {
   const { problem } = props;
   const problemType = problem.category.category;
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { authenticatedUser } = useAuth();
+  const [error, setError] = useState("");
+  const onSubmitHandler = async (value: ISubmissionHandler) => {
+    setIsSubmitting(true);
+    console.log("on Submit handler", {
+      value,
+    });
+    try {
+      if (problemType === "email") {
+        const response = await emailSubmissionHandler({
+          formattedEmail: value.email?.formattedContent || "",
+          nonFormattedEmail: value.email?.unFormattedContent || "",
+          problemId: problem.id,
+          userEmail: authenticatedUser?.attributes?.email,
+        });
+        //@ts-ignore
+        const submissionId = response?.data?.createSUBMISSION?.id;
+        props.setSubmissionId(submissionId);
+      }
+      setIsSubmitting(false);
+    } catch (err: any) {
+      setError(err);
+      setIsSubmitting(false);
+    }
+  };
+
+  if (isSubmitting) {
+    return <p>Your response is being submitted...</p>;
+  }
+  if (error) {
+    return <Error />;
+  }
   switch (problemType) {
     case "chat":
       return (
@@ -69,7 +122,7 @@ const AnswerContainer = (props: { problem: any }) => {
         />
       );
     case "email":
-      return <EmailSection />;
+      return <EmailSection onSubmitHandler={onSubmitHandler} />;
     default:
       return <></>;
   }
@@ -79,9 +132,74 @@ const PracticeDetails = () => {
   const { practiceId = "" } = router.query;
   //@ts-ignore
   const practiceProblem = problem[practiceId];
+  const { collapseSidebar } = useSidebarContext();
+  const [activeKey, setActiveKey] = useState("description");
+  const [submissionId, setSubmissionId] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setIsError] = useState(false);
+  const [submissionList, setSubmissionList] = useState({});
+  const { authenticatedUser, authLoading } = useAuth();
+  const getAllSubmissions = async () => {
+    setIsLoading(true);
+    try {
+      const response = await listSubmissionBasedOnUser({
+        user: {
+          eq: authenticatedUser?.attributes?.email,
+        },
+        problemId: {
+          eq: practiceId as string,
+        },
+      });
+      console.log("list submission response", response);
+      //@ts-ignore
+      setSubmissionList(response?.data?.listSUBMISSION?.items);
+      setIsLoading(false);
+    } catch (err: any) {
+      setIsError(err.message);
+      setIsLoading(false);
+    }
+  };
+  useEffect(() => {
+    collapseSidebar?.();
+    getAllSubmissions();
+  }, []);
+
+  useEffect(() => {
+    if (submissionId) {
+      setActiveKey("submissions");
+    }
+  }, [submissionId]);
+
+  if (authLoading || isLoading) {
+    return <p>Loading...</p>;
+  }
   if (!practiceProblem) {
     return <NotFound />;
   }
+  if (error) {
+    return <Error />;
+  }
+  const tabItems = [
+    {
+      key: "description",
+      label: "Description",
+      children: (
+        <ProblemSection
+          category={practiceProblem.category.category}
+          companiesAskedIn={["Amazon"]}
+          description={practiceProblem.problemDescription}
+          difficulty={practiceProblem.difficulty}
+          expectations={practiceProblem.expectations}
+        />
+      ),
+    },
+    {
+      key: "submissions",
+      label: "Submissions",
+      children: <SubmissionSummary submissionId={submissionId} />,
+    },
+  ];
+
   return (
     <div>
       <PageHead
@@ -92,16 +210,20 @@ const PracticeDetails = () => {
       <PageWrapper>
         <div className={styles.container}>
           <div className={styles.problemSection}>
-            <ProblemSection
-              category={practiceProblem.category.category}
-              companiesAskedIn={["Amazon"]}
-              description={practiceProblem.problemDescription}
-              difficulty={practiceProblem.difficulty}
-              expectations={practiceProblem.expectations}
+            <Tabs
+              defaultActiveKey="description"
+              items={tabItems}
+              activeKey={activeKey}
+              onTabClick={(tabKey) => {
+                setActiveKey(tabKey);
+              }}
             />
           </div>
           <div className={styles.solutionSection}>
-            <AnswerContainer problem={practiceProblem} />
+            <AnswerContainer
+              problem={practiceProblem}
+              setSubmissionId={setSubmissionId}
+            />
           </div>
         </div>
       </PageWrapper>

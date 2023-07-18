@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import { ChatMessengerContext } from ".";
 import FeedbackLoader from "./FeedbackLoader";
-import { LanguageProficiencyAssessement } from "./utils/evaluateMessage";
+import { LanguageProficiencyAssessement } from "../../../../utils/evaluateMessage";
 import { IChatMessages } from "../ChatSection";
 
 const LanguageProficiency = () => {

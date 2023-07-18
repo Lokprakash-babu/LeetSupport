@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { ChatMessengerContext } from ".";
 import { IChatMessages } from "../ChatSection";
 import FeedbackLoader from "./FeedbackLoader";
-import { ToneProficiencyAnalysis } from "./utils/evaluateMessage";
+import { ToneProficiencyAnalysis } from "../../../../utils/evaluateMessage";
 
 const ToneAnalysis = () => {
   const { chatMessages } = useContext(ChatMessengerContext);

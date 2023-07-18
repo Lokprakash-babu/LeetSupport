@@ -1,6 +1,6 @@
 import "react-quill/dist/quill.snow.css";
 import dynamic from "next/dynamic";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import EmailFooter from "./EmailFooter";
 const QuillNoSSRWrapper = dynamic(import("react-quill"), {
   ssr: false,
@@ -8,15 +8,20 @@ const QuillNoSSRWrapper = dynamic(import("react-quill"), {
 });
 
 export interface IEmailEditor {
-  onSubmit: (val: string) => any;
+  onSubmit: (val: {
+    chat?: string;
+    email?: {
+      formattedContent: string;
+      unFormattedContent: string;
+    };
+  }) => any;
+  initialValue?: string;
 }
 const EmailEditor = (props: IEmailEditor) => {
-  const [emailValue, setEmailValue] = useState("");
+  const [emailValue, setEmailValue] = useState(props.initialValue || "");
+
   const [onlyTextContent, setOnlyTextContent] = useState("");
-  useEffect(() => {
-    setEmailValue("");
-    setOnlyTextContent("");
-  }, []);
+
   return (
     <>
       <QuillNoSSRWrapper
@@ -50,8 +55,13 @@ const EmailEditor = (props: IEmailEditor) => {
       <EmailFooter
         textContent={onlyTextContent}
         onClick={() => {
-          if (onlyTextContent.length >= 250) {
-            props.onSubmit(onlyTextContent);
+          if (onlyTextContent.length >= 2) {
+            props.onSubmit({
+              email: {
+                formattedContent: emailValue,
+                unFormattedContent: onlyTextContent,
+              },
+            });
           }
         }}
       />

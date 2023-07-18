@@ -5,7 +5,7 @@ import { IChatMessages } from "../ChatSection";
 import ChatMessage from "./ChatMessage";
 import LoadingChatMessage from "./LoadingChatMessage";
 import ChatInput from "./ChatInput";
-import { postMessage } from "./utils/postMessage";
+import { postMessage } from "../../../../utils/postMessage";
 import ChatFeedback from "./ChatFeeback";
 
 export interface IChatMessenger {
