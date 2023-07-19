@@ -1,6 +1,7 @@
 export const GET_SUBMISSION = `
-query getSUBMISSION($id: String!) {
+query getSUBMISSION($id: ID!) {
     getSUBMISSION(id: $id) {
+        id
         toneFeedback
         response
         problemId
