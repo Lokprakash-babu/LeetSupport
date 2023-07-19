@@ -20,11 +20,11 @@ export const emailSubmissionHandler = async (args: IEmailSubmissionHandler) => {
       content: formattedEmail,
     },
   ];
-  const feedbacks = await Promise.all([
-    LanguageProficiencyAssessement(answerResponse),
-    ToneProficiencyAnalysis(answerResponse),
-    OverallFeedbackProficiency(answerResponse),
-  ]);
+  // const feedbacks = await Promise.all([
+  //   LanguageProficiencyAssessement(answerResponse),
+  //   ToneProficiencyAnalysis(answerResponse),
+  //   OverallFeedbackProficiency(answerResponse),
+  // ]);
 
   const response = await createSubmission({
     user: userEmail,
@@ -33,11 +33,11 @@ export const emailSubmissionHandler = async (args: IEmailSubmissionHandler) => {
       nonFormattedEmail,
       formattedEmail,
     }),
-    languageFeedback: JSON.stringify(feedbacks[0]),
+    // languageFeedback: JSON.stringify(feedbacks[0]),
 
-    toneFeedback: JSON.stringify(feedbacks[0]),
+    // toneFeedback: JSON.stringify(feedbacks[0]),
 
-    overallFeedback: JSON.stringify(feedbacks[0]),
+    // overallFeedback: JSON.stringify(feedbacks[0]),
   });
   return response;
 };

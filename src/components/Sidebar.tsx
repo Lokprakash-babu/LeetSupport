@@ -62,6 +62,11 @@ const SidebarMenuItems = [
     key: "Practice",
   },
   {
+    label: <SidebarItemLink link="/submissions" label="Submissions" />,
+    icon: <AimOutlined />,
+    key: "Submissions",
+  },
+  {
     label: "Learn (Coming Soon!)",
     key: "tutorials",
     icon: <ExperimentOutlined />,
@@ -83,7 +88,6 @@ const SidebarMenuItems = [
 
 export const Sidebar = () => {
   const { sidebarOpen, setSidebarOpen } = useSidebarContext();
-  console.log("sidebarOpen", sidebarOpen);
   return (
     <Layout.Sider
       style={sideBarStylings}

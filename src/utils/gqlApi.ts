@@ -1,9 +1,6 @@
 import { Amplify, API } from "aws-amplify";
 import awsConfig from "../aws-exports";
-import {
-  CREATE_SUBMISSION,
-  LIST_SUBMISSION_BASED_ON_USER,
-} from "@/graphql/mutation";
+import { CREATE_SUBMISSION } from "@/graphql/mutation";
 import { GET_SUBMISSION } from "@/graphql/queries";
 
 Amplify.configure(awsConfig);
@@ -42,29 +39,38 @@ export const getSubmission = async (variables: IGetSubmission) => {
 };
 
 export interface IListSubmissions {
-  user: {
+  user?: {
     eq: string;
   };
   problemId?: {
     eq: string;
   };
+  nextToken?: string;
 }
 
-export const listSubmissionBasedOnUser = async (
-  variables: IListSubmissions
-) => {
-  const nonDeletedFilter = {
-    _deleted: {
-      ne: true,
-    },
-  };
-  const response = await API.graphql({
-    query: LIST_SUBMISSION_BASED_ON_USER,
-    authMode: "AMAZON_COGNITO_USER_POOLS",
-    variables: {
-      filter: { ...variables, ...nonDeletedFilter },
-      limit: 10,
-    },
-  });
-  return response;
-};
+// export const listSubmissionBasedOnUser = async (
+//   variables: IListSubmissions
+// ) => {
+//   const nonDeletedFilter = {
+//     _deleted: {
+//       ne: true,
+//     },
+//   };
+
+//   const queryVariables = {
+//     ...variables,
+//     ...nonDeletedFilter,
+//   };
+//   if (variables.nextToken) {
+//     queryVariables["nextToken"] = variables.nextToken;
+//   }
+//   const response = await API.graphql({
+//     query: LIST_SUBMISSION_BASED_ON_USER,
+//     authMode: "AMAZON_COGNITO_USER_POOLS",
+//     variables: {
+//       filter: queryVariables,
+//       limit: 10,
+//     },
+//   });
+//   return response;
+// };

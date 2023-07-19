@@ -38,3 +38,55 @@ body {
 .ql-container {
   height: 60vh !important;
 }
+
+.table-container {
+  width: 100%;
+  overflow-y: auto; /* Enable vertical scrolling when the table overflows the container */
+  border: 1px solid #cccccc;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  border-spacing: 0;
+  table-layout: fixed; /* Prevent table columns from changing width */
+}
+
+.table th,
+.table td {
+  padding: 12px 16px;
+  text-align: left;
+  border-bottom: 1px solid #cccccc;
+}
+
+.table th {
+  background-color: #001529;
+  color: #ffffff;
+  font-weight: bold;
+  position: sticky; /* Make the header sticky */
+  top: 0; /* Stick the header to the top */
+  z-index: 1; /* Ensure the header stays above the table cells while scrolling */
+}
+
+.table tr:hover {
+  background-color: #f0f0f0;
+}
+
+/* Alternate row colors */
+.table tr:nth-child(even) {
+  background-color: #f5f5f5;
+}
+
+.ellipsis-container {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 200px; /* Set a specific width for ellipsis to work */
+}
+.ellipsis-cell {
+  max-width: 200px; /* Set a specific width for the cell to enable ellipsis */
+  text-overflow: ellipsis;
+  overflow: hidden;
+}

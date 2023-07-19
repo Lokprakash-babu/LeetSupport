@@ -1,7 +1,7 @@
 import { useAuth } from "@/components/Auth";
 import PageHead from "@/components/PageHead/PageHead";
 import PageWrapper from "@/components/PageWrapper/PageWrapper";
-import SubmissionsTable from "@/components/SubmissionsTable";
+import SubmissionsTable from "@/components/Submission/SubmissionsTable";
 
 const Submissions = () => {
   const { authLoading, authenticatedUser } = useAuth();
@@ -12,7 +12,7 @@ const Submissions = () => {
     <>
       <PageHead pageName="Submissions" />
       <PageWrapper>
-        <SubmissionsTable email={authenticatedUser?.attributes?.email} />
+        <SubmissionsTable maxHeight="80vh" withProblemColumn />
       </PageWrapper>
     </>
   );

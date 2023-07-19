@@ -24,3 +24,21 @@ query listSUBMISSION($filter: ModelSUBMISSIONFilterInput!) {
 }
 
 `;
+
+export const LIST_SUBMISSION_BASED_ON_USER = `
+query listSUBMISSIONS($filter: ModelSUBMISSIONFilterInput!) {
+    listSUBMISSIONS(filter: $filter,  limit: 1000) {
+      items {
+        id
+        problemId
+        createdAt
+        _deleted
+        user
+        languageFeedback
+      overallFeedback
+      toneFeedback
+      }
+      nextToken
+    }
+  }
+`;
