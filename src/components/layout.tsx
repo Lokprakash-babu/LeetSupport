@@ -23,9 +23,17 @@ const AppLayout = ({ children }: { children: JSX.Element }) => {
               <Header />
               <Layout hasSider>
                 <Sidebar />
-                <Layout.Content>
-                  <Layout style={{ background: "white" }}>{children}</Layout>
-                </Layout.Content>
+                {/* <Layout.Content> */}
+                <Layout
+                  style={{
+                    background: "white",
+                    overflow: "auto",
+                    height: "calc(100vh - 56px)",
+                  }}
+                >
+                  {children}
+                </Layout>
+                {/* </Layout.Content> */}
               </Layout>
             </Layout>
           </SidebarContextProvider>
