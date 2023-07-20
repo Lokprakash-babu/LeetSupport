@@ -3,7 +3,9 @@ import PageWrapper from "@/components/PageWrapper/PageWrapper";
 import ProblemSection from "@/components/ProblemSection/ProblemSection";
 import { useRouter } from "next/router";
 import styles from "@styles/[practiceId].module.css";
-import ChatSection from "@/components/AnswerSection/ChatSection/ChatSection";
+import ChatSection, {
+  IChatMessages,
+} from "@/components/AnswerSection/ChatSection/ChatSection";
 import NotFound from "@/components/NotFound/NotFound";
 import EmailSection from "@/components/AnswerSection/EmailSection/EmailSection";
 import { useAuth } from "@/components/Auth";
@@ -14,9 +16,10 @@ import { emailSubmissionHandler } from "@/utils/emailSubmissionHandler";
 import Error from "@/components/Error";
 import SubmissionSummary from "@/components/Submission/SubmissionSummary";
 import { problems } from "@/constants/problems";
+import { chatSubmissionHandler } from "@/utils/chatSubmissionHandler";
 
 export interface ISubmissionHandler {
-  chat?: string;
+  chat?: IChatMessages[];
   email?: {
     formattedContent: string;
     unFormattedContent: string;
@@ -31,16 +34,24 @@ const AnswerContainer = (props: {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { authenticatedUser } = useAuth();
   const [error, setError] = useState("");
-  const onSubmitHandler = async (value: ISubmissionHandler) => {
+  const onSubmitHandler = async (value?: ISubmissionHandler) => {
     setIsSubmitting(true);
-
     try {
-      const response = await emailSubmissionHandler({
-        formattedEmail: value.email?.formattedContent || "",
-        nonFormattedEmail: value.email?.unFormattedContent || "",
-        problemId: problem.id,
-        userEmail: authenticatedUser?.attributes?.email,
-      });
+      let response;
+      if (problemType === "email") {
+        response = await emailSubmissionHandler({
+          formattedEmail: value?.email?.formattedContent || "",
+          nonFormattedEmail: value?.email?.unFormattedContent || "",
+          problemId: problem.id,
+          userEmail: authenticatedUser?.attributes?.email,
+        });
+      } else if (problemType === "chat") {
+        response = await chatSubmissionHandler({
+          chatMessages: value?.chat || [],
+          problemId: problem.id,
+          userEmail: authenticatedUser?.attributes?.email,
+        });
+      }
       setIsSubmitting(false);
       props.onSuccessfulSubmit(response);
     } catch (err: any) {
@@ -62,6 +73,7 @@ const AnswerContainer = (props: {
           context={problem.context}
           initialCustomerSupportMessage={problem.initialSupportMessage}
           customerInfo={problem.customerInfo}
+          onSubmitHandler={onSubmitHandler}
         />
       );
     case "email":
@@ -77,24 +89,19 @@ const PracticeDetails = () => {
   const practiceProblem = problems[practiceId];
   const { collapseSidebar } = useSidebarContext();
   const [activeKey, setActiveKey] = useState("description");
-  const [isLoading, setIsLoading] = useState(false);
   const { authenticatedUser, authLoading } = useAuth();
 
   useEffect(() => {
     collapseSidebar?.();
-    // getAllSubmissions();
   }, []);
 
-  if (authLoading || isLoading) {
+  if (authLoading) {
     return <p>Loading...</p>;
   }
   if (!practiceProblem) {
     return <NotFound />;
   }
 
-  // if (error) {
-  //   return <Error />;
-  // }
   const tabItems = [
     {
       key: "description",

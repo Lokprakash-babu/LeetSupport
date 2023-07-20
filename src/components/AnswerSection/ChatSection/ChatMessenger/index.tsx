@@ -1,52 +1,26 @@
-import { Button, Spin } from "antd";
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import {
+  useState,
+  createContext,
+  useCallback,
+  useMemo,
+  useEffect,
+} from "react";
 import styles from "../ChatSection.module.css";
-import { IChatMessages } from "../ChatSection";
-import ChatMessage from "./ChatMessage";
-import LoadingChatMessage from "./LoadingChatMessage";
-import ChatInput from "./ChatInput";
-import { postMessage } from "../../../../utils/postMessage";
-import ChatFeedback from "./ChatFeeback";
+import { IChatMessages, chatPersonas } from "../ChatSection";
+import ChatFooter from "./ChatFooter";
+import ChatMessagesContainer from "./ChatMessagesContainer";
+import ChatHeader from "./ChatHeader";
+import { postTheEnteredMessge } from "./utils/postEnteredMessage";
+import { ISubmissionHandler } from "@/pages/practice/[practiceId]";
 
 export interface IChatMessenger {
-  initialChatValue: IChatMessages[];
+  systemChatMessage: IChatMessages;
+  initialUserMessage: IChatMessages;
   customerName: string;
+  isReadOnly?: boolean;
+  onSubmitHandler?: (args?: ISubmissionHandler) => void;
+  defaultValues?: IChatMessages[];
 }
-
-const postTheEnteredMessge = async ({
-  previousMessages,
-  newMessage,
-  beforeSubmission,
-  afterSubmission,
-}: {
-  previousMessages: IChatMessages[];
-  newMessage: string;
-  beforeSubmission: () => any;
-  afterSubmission: (val: any) => any;
-}) => {
-  beforeSubmission();
-  const response: IChatMessages = await postMessage(
-    previousMessages,
-    newMessage
-  );
-  afterSubmission(response);
-  return;
-};
-
-const initiateChat = async ({
-  initialChatValue,
-  afterInitiate,
-  beforeInitiate,
-}: {
-  initialChatValue: IChatMessages[];
-  afterInitiate: (val: IChatMessages) => void;
-  beforeInitiate: () => void;
-}) => {
-  beforeInitiate();
-  const response: IChatMessages = await postMessage(initialChatValue, "");
-  afterInitiate(response);
-  return;
-};
 
 const messageLimitationTracker = ({
   allMessages,
@@ -64,135 +38,89 @@ export interface IChatMessengerContext {
   chatMessages?: IChatMessages[];
   resetChat?: () => void;
 }
-export const ChatMessengerContext = React.createContext<IChatMessengerContext>(
-  {}
-);
+export const ChatMessengerContext = createContext<IChatMessengerContext>({});
 
-const ChatMessenger = ({ initialChatValue, customerName }: IChatMessenger) => {
-  const [chatMessages, setChatMessages] =
-    useState<IChatMessages[]>(initialChatValue);
+const ChatMessenger = ({
+  systemChatMessage,
+  initialUserMessage,
+  customerName,
+  isReadOnly,
+  onSubmitHandler,
+  defaultValues,
+}: IChatMessenger) => {
+  const [chatMessages, setChatMessages] = useState<IChatMessages[]>([
+    { ...systemChatMessage },
+    { ...initialUserMessage },
+    ...(defaultValues ? defaultValues : []),
+  ]);
   const [isChatLoading, setChatLoading] = useState(false);
-  const anchorRef = useRef(null);
-  const [userTypedMessage, setUserTypedMessage] = useState("");
-  const [showChatFeedback, setShowChatFeedback] = useState(false);
-  useEffect(() => {
-    if (anchorRef && anchorRef?.current) {
-      //@ts-ignore
-      anchorRef.current.scrollTop = anchorRef.current.scrollHeight;
-    }
-  }, [chatMessages]);
 
-  //This will be called when the support agent clicks endchat.
-  const terminateChat = () => {
-    //Show chat feedback
-    //Evaluate message
-    setShowChatFeedback(true);
-  };
-  const chatSubmission = (e: React.SyntheticEvent) => {
-    e.preventDefault();
-    const newChatMessage: IChatMessages[] = [
-      ...chatMessages,
-      { role: "user", content: userTypedMessage },
-    ];
-    const isLimitationExceeded = messageLimitationTracker({
-      allMessages: newChatMessage,
-    });
-    if (isLimitationExceeded) {
-      terminateChat();
-      return;
-    } else {
-      postTheEnteredMessge({
-        previousMessages: chatMessages,
-        newMessage: userTypedMessage,
-        beforeSubmission() {
-          setChatMessages([...newChatMessage]);
-          setChatLoading(true);
-          setUserTypedMessage("");
-        },
-        afterSubmission(botResponse) {
-          setChatMessages([...newChatMessage, { ...botResponse }]);
-          setChatLoading(false);
-        },
-      });
-    }
-  };
-  useEffect(() => {
-    initiateChat({
-      initialChatValue: chatMessages,
-      beforeInitiate() {
-        setChatLoading(true);
-      },
-      afterInitiate(botResponse) {
+  const initiateChat = useMemo(
+    () => async () => {
+      setChatLoading(true);
+      try {
+        const response = await postTheEnteredMessge({
+          previousMessages: [systemChatMessage],
+          newMessage: initialUserMessage.content,
+        });
+        setChatMessages([...chatMessages, { ...response }]);
         setChatLoading(false);
-        setChatMessages([...chatMessages, { ...botResponse }]);
-      },
-    });
-  }, []);
-
-  const resetChat = () => {
-    setChatMessages(initialChatValue);
-    setUserTypedMessage("");
-    initiateChat({
-      initialChatValue: initialChatValue,
-      beforeInitiate() {
-        setChatLoading(true);
-        setShowChatFeedback(false);
-      },
-      afterInitiate(botResponse) {
-        setChatLoading(false);
-        setChatMessages((historyMessages) => [
-          ...historyMessages,
-          { ...botResponse },
-        ]);
-      },
-    });
-  };
+      } catch (err) {
+        console.log("error", err);
+      }
+    },
+    [systemChatMessage, initialUserMessage]
+  );
   return (
-    <ChatMessengerContext.Provider
-      value={{
-        chatMessages,
-        resetChat,
-      }}
-    >
-      {!showChatFeedback && (
-        <div className={`${styles.chatContainer}`}>
-          <div className={styles.chatHeader}>
-            <div className={styles.chatHeaderTitle}>
-              <h4>{customerName}</h4>
-              <Button danger onClick={terminateChat}>
-                End Chat
-              </Button>
-            </div>
-          </div>
-          <div className={styles.chatMessagesContainer} ref={anchorRef}>
-            {chatMessages.map((message, index) => {
-              if (message.role === "system") {
-                return <></>;
-              }
-              return <ChatMessage {...message} key={index} />;
-            })}
-            {isChatLoading && <LoadingChatMessage />}
-          </div>
-          <form className={`${styles.chatFooter}`} onSubmit={chatSubmission}>
-            <ChatInput
-              onChange={(e) => {
-                setUserTypedMessage(e.target.value);
-              }}
-              value={userTypedMessage}
-              isDisabled={isChatLoading}
-            />
-            <button
-              type="submit"
-              className={styles.chatButton}
-              disabled={isChatLoading}
-            >
-              Send
-            </button>
-          </form>
-        </div>
+    <div className={`${styles.chatContainer}`}>
+      <ChatHeader
+        customerName={customerName}
+        onEndChat={() => {
+          onSubmitHandler?.({
+            chat: chatMessages,
+          });
+        }}
+        isReadOnlyMode={isReadOnly}
+      />
+      <ChatMessagesContainer
+        chatMessages={chatMessages}
+        isChatLoading={isChatLoading}
+        initiateChat={initiateChat}
+        isReadOnly={isReadOnly}
+      />
+      {!isReadOnly && (
+        <ChatFooter
+          onSend={async (userEnteredMessage) => {
+            const newMessage = {
+              role: "user" as chatPersonas,
+              content: userEnteredMessage,
+            };
+            const previousMessages = [...chatMessages];
+            setChatMessages([...chatMessages, { ...newMessage }]);
+
+            setChatLoading(true);
+            const response = await postTheEnteredMessge({
+              previousMessages: [
+                ...previousMessages,
+                {
+                  role: "system",
+                  content: `Remember ${systemChatMessage.content}`,
+                },
+              ],
+              newMessage: userEnteredMessage,
+            });
+            const newChatMessage = [
+              ...previousMessages,
+              { ...newMessage },
+              { ...response },
+            ];
+            setChatMessages([...newChatMessage]);
+            setChatLoading(false);
+          }}
+          isDisabled={isChatLoading}
+        />
       )}
-      {showChatFeedback && <ChatFeedback />}
-    </ChatMessengerContext.Provider>
+    </div>
   );
 };
 

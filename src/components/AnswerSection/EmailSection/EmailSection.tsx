@@ -1,14 +1,7 @@
 import EmailEditor from "./EmailEditor";
-
-export interface ISubmitHander {
-  chat?: string;
-  email?: {
-    formattedContent: string;
-    unFormattedContent: string;
-  };
-}
+import { ISubmissionHandler } from "../../../pages/practice/[practiceId]";
 export interface IEmailSection {
-  onSubmitHandler: (args: ISubmitHander) => void;
+  onSubmitHandler: (args: ISubmissionHandler) => void;
 }
 const EmailSection = (props: IEmailSection) => {
   return (

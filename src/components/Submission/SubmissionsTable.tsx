@@ -20,7 +20,7 @@ const SubmissionsTable = (props: ISubmissionTable) => {
       key: "submissionId",
       render: (record: any) => {
         return (
-          <Link href={`/submission/${record.id}`} target="_blank">
+          <Link href={`/submissions/${record.id}`} target="_blank">
             View Submission
           </Link>
         );

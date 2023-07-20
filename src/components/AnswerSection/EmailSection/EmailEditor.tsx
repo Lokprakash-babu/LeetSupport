@@ -2,19 +2,14 @@ import "react-quill/dist/quill.snow.css";
 import dynamic from "next/dynamic";
 import { useState } from "react";
 import EmailFooter from "./EmailFooter";
+import { ISubmissionHandler } from "@/pages/practice/[practiceId]";
 const QuillNoSSRWrapper = dynamic(import("react-quill"), {
   ssr: false,
   loading: () => <p>Loading ...</p>,
 });
 
 export interface IEmailEditor {
-  onSubmit?: (val: {
-    chat?: string;
-    email?: {
-      formattedContent: string;
-      unFormattedContent: string;
-    };
-  }) => any;
+  onSubmit?: (val: ISubmissionHandler) => any;
   initialValue?: string;
 }
 const EmailEditor = (props: IEmailEditor) => {
