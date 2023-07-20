@@ -1,11 +1,13 @@
 import {
   AimOutlined,
+  CheckCircleOutlined,
   CoffeeOutlined,
   ExperimentOutlined,
   FireOutlined,
 } from "@ant-design/icons";
 import { Layout, Menu } from "antd";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { useState, createContext, useContext, CSSProperties } from "react";
 
 export interface ISidebarContext {
@@ -52,19 +54,18 @@ const SidebarItemLink = ({ link, label }: { link: string; label: string }) => {
 const sideBarStylings: CSSProperties = {
   overflow: "auto",
   height: "100vh",
-  paddingTop: "24px",
 };
 
 const SidebarMenuItems = [
   {
     label: <SidebarItemLink link="/practice" label="Practice" />,
     icon: <AimOutlined />,
-    key: "Practice",
+    key: "practice",
   },
   {
     label: <SidebarItemLink link="/submissions" label="Submissions" />,
-    icon: <AimOutlined />,
-    key: "Submissions",
+    icon: <CheckCircleOutlined />,
+    key: "submissions",
   },
   {
     label: "Learn (Coming Soon!)",
@@ -88,6 +89,9 @@ const SidebarMenuItems = [
 
 export const Sidebar = () => {
   const { sidebarOpen, setSidebarOpen } = useSidebarContext();
+  const router = useRouter();
+  const currentPathName = router?.pathname.split("/");
+  const currentActiveKey = currentPathName?.[1];
   return (
     <Layout.Sider
       style={sideBarStylings}
@@ -95,13 +99,12 @@ export const Sidebar = () => {
       collapsible
       collapsed={!sidebarOpen}
       onCollapse={(value) => {
-        console.log("value", value);
         setSidebarOpen?.(!value);
       }}
     >
       <Menu
         theme="dark"
-        defaultSelectedKeys={["Practice"]}
+        defaultSelectedKeys={[currentActiveKey]}
         items={SidebarMenuItems}
       />
     </Layout.Sider>

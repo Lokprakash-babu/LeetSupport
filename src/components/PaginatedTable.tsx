@@ -1,6 +1,7 @@
 import { IUsePaginateQuery, usePaginateQuery } from "@/hooks/usePaginateQuery";
 import Error from "./Error";
 import FetchmoreLoader from "./FetchmoreLoader";
+import { Empty } from "antd";
 
 export interface IColumnConfig {
   key: string;
@@ -32,6 +33,14 @@ const PaginatedTable = ({
 
   if (error) {
     return <Error />;
+  }
+
+  if (data && data.length === 0) {
+    return (
+      <Empty image={Empty.PRESENTED_IMAGE_SIMPLE}>
+        No Submissions Available
+      </Empty>
+    );
   }
   return (
     <div

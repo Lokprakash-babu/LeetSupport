@@ -98,3 +98,15 @@ pre {
   white-space: -o-pre-wrap; /* Opera 7 */
   word-wrap: break-word; /* Internet Explorer 5.5+ */
 }
+
+.header {
+  padding: 1rem;
+  padding-right: 2rem;
+  padding-left: 2.5rem;
+  display: flex;
+  flex-direction: row-reverse;
+  background-color: #001529;
+  color: white;
+  justify-content: space-between;
+  align-items: center;
+}
