@@ -1,11 +1,9 @@
-import { useCallback, useEffect } from "react";
-import styles from "./ChatSection.module.css";
-import { Button, Spin } from "antd";
+import { ISubmissionHandler } from "@/pages/practice/[practiceId]";
 import ChatMessenger from "./ChatMessenger";
 
 export interface IChatSection {
   context: string;
-  onSubmit?: () => any;
+  onSubmitHandler: (args?: ISubmissionHandler) => void;
   customerInfo: {
     name: string;
   };
@@ -20,19 +18,22 @@ export interface IChatMessages {
 
 const ChatSection = (props: IChatSection) => {
   const { context, customerInfo, initialCustomerSupportMessage } = props;
-  const initialChatValue: IChatMessages[] = [
-    {
-      role: "system",
-      content: context,
-    },
-    { role: "user" as chatPersonas, content: initialCustomerSupportMessage },
-  ];
 
+  const systemChatMessage: IChatMessages = {
+    role: "system",
+    content: context,
+  };
+  const initialUserMessage: IChatMessages = {
+    role: "user" as chatPersonas,
+    content: initialCustomerSupportMessage,
+  };
   return (
     <>
       <ChatMessenger
-        initialChatValue={initialChatValue}
+        systemChatMessage={systemChatMessage}
+        initialUserMessage={initialUserMessage}
         customerName={customerInfo.name}
+        onSubmitHandler={props.onSubmitHandler}
       />
     </>
   );

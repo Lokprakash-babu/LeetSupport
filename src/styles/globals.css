@@ -7,7 +7,7 @@
 html,
 body {
   max-width: 100vw;
-  overflow-x: hidden;
+  overflow: hidden;
   background: white;
 }
 
@@ -37,4 +37,76 @@ body {
 
 .ql-container {
   height: 60vh !important;
+}
+
+.table-container {
+  width: 100%;
+  overflow-y: auto; /* Enable vertical scrolling when the table overflows the container */
+  border: 1px solid #cccccc;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  border-spacing: 0;
+  table-layout: fixed; /* Prevent table columns from changing width */
+}
+
+.table th,
+.table td {
+  padding: 12px 16px;
+  text-align: left;
+  border-bottom: 1px solid #cccccc;
+}
+
+.table th {
+  background-color: #001529;
+  color: #ffffff;
+  font-weight: bold;
+  position: sticky; /* Make the header sticky */
+  top: 0; /* Stick the header to the top */
+  z-index: 1; /* Ensure the header stays above the table cells while scrolling */
+}
+
+.table tr:hover {
+  background-color: #f0f0f0;
+}
+
+/* Alternate row colors */
+.table tr:nth-child(even) {
+  background-color: #f5f5f5;
+}
+
+.ellipsis-container {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 200px; /* Set a specific width for ellipsis to work */
+}
+.ellipsis-cell {
+  max-width: 200px; /* Set a specific width for the cell to enable ellipsis */
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+pre {
+  white-space: pre-wrap; /* Since CSS 2.1 */
+  white-space: -moz-pre-wrap; /* Mozilla, since 1999 */
+  white-space: -pre-wrap; /* Opera 4-6 */
+  white-space: -o-pre-wrap; /* Opera 7 */
+  word-wrap: break-word; /* Internet Explorer 5.5+ */
+}
+
+.header {
+  padding: 1rem;
+  padding-right: 2rem;
+  padding-left: 2.5rem;
+  display: flex;
+  flex-direction: row-reverse;
+  background-color: #001529;
+  color: white;
+  justify-content: space-between;
+  align-items: center;
 }

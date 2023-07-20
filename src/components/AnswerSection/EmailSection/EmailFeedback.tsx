@@ -6,7 +6,7 @@ import {
   LanguageProficiencyAssessement,
   OverallFeedbackProficiency,
   ToneProficiencyAnalysis,
-} from "../ChatSection/ChatMessenger/utils/evaluateMessage";
+} from "../../../utils/evaluateMessage";
 import { IChatMessages } from "../ChatSection/ChatSection";
 const EmailLanguageProficiency = (props: { emailContent: string }) => {
   const { emailContent } = props;

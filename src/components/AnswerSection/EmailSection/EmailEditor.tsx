@@ -1,26 +1,27 @@
 import "react-quill/dist/quill.snow.css";
 import dynamic from "next/dynamic";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import EmailFooter from "./EmailFooter";
+import { ISubmissionHandler } from "@/pages/practice/[practiceId]";
 const QuillNoSSRWrapper = dynamic(import("react-quill"), {
   ssr: false,
   loading: () => <p>Loading ...</p>,
 });
 
 export interface IEmailEditor {
-  onSubmit: (val: string) => any;
+  onSubmit?: (val: ISubmissionHandler) => any;
+  initialValue?: string;
 }
 const EmailEditor = (props: IEmailEditor) => {
-  const [emailValue, setEmailValue] = useState("");
+  const [emailValue, setEmailValue] = useState(props.initialValue || "");
+
   const [onlyTextContent, setOnlyTextContent] = useState("");
-  useEffect(() => {
-    setEmailValue("");
-    setOnlyTextContent("");
-  }, []);
+
   return (
     <>
       <QuillNoSSRWrapper
         theme="snow"
+        readOnly={!!props.initialValue}
         style={{
           minHeight: "70vh",
           maxHeight: "70vh",
@@ -47,14 +48,21 @@ const EmailEditor = (props: IEmailEditor) => {
           setEmailValue(enteredValue);
         }}
       />
-      <EmailFooter
-        textContent={onlyTextContent}
-        onClick={() => {
-          if (onlyTextContent.length >= 250) {
-            props.onSubmit(onlyTextContent);
-          }
-        }}
-      />
+      {!!props.onSubmit && (
+        <EmailFooter
+          textContent={onlyTextContent}
+          onClick={() => {
+            if (onlyTextContent.length >= 2) {
+              props?.onSubmit?.({
+                email: {
+                  formattedContent: emailValue,
+                  unFormattedContent: onlyTextContent,
+                },
+              });
+            }
+          }}
+        />
+      )}
     </>
   );
 };

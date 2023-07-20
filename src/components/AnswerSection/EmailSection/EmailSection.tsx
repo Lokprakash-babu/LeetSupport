@@ -1,28 +1,12 @@
-import { useState } from "react";
 import EmailEditor from "./EmailEditor";
-import EmailFeedback from "./EmailFeedback";
-
-const EmailSection = () => {
-  const [showEmailFeedback, setShowEmailFeedback] = useState(false);
-  const [submittedEmail, setSubmittedEmail] = useState("");
+import { ISubmissionHandler } from "../../../pages/practice/[practiceId]";
+export interface IEmailSection {
+  onSubmitHandler: (args: ISubmissionHandler) => void;
+}
+const EmailSection = (props: IEmailSection) => {
   return (
     <>
-      {!showEmailFeedback && (
-        <EmailEditor
-          onSubmit={(enterEmail) => {
-            setSubmittedEmail(enterEmail);
-            setShowEmailFeedback(true);
-          }}
-        />
-      )}
-      {showEmailFeedback && (
-        <EmailFeedback
-          emailContent={submittedEmail}
-          resetEmail={() => {
-            setShowEmailFeedback(false);
-          }}
-        />
-      )}
+      <EmailEditor onSubmit={props.onSubmitHandler} />
     </>
   );
 };

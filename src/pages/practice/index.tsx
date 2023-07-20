@@ -14,6 +14,7 @@ import FilterTag from "@/components/FilterTag/FilterTag";
 import Link from "next/link";
 import Unauthenticated from "@/components/Unauthenticated";
 import { useAuth } from "@/components/Auth";
+import { useSidebarContext } from "@/components/Sidebar";
 interface DataType {
   key: string;
   name: string;
@@ -126,6 +127,7 @@ const Practice = () => {
     setAuthenticatedUser,
     setAuthLoading,
   } = useAuth();
+  const { expandSidebar } = useSidebarContext();
 
   const FilterTagConfig = [
     {
@@ -172,6 +174,7 @@ const Practice = () => {
 
   useEffect(() => {
     whoAmI();
+    expandSidebar?.();
   }, []);
   const problemsSet = useMemo(() => {
     return activeFilterTag === "all"
