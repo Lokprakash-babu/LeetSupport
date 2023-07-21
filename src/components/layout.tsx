@@ -3,6 +3,7 @@ import { AuthContextProvider } from "./Auth";
 import { useRouter } from "next/router";
 import SidebarContextProvider, { Sidebar } from "./Sidebar";
 import Header from "./Header";
+import NotificationProvider from "./Notification";
 
 const AppLayout = ({ children }: { children: JSX.Element }) => {
   const router = useRouter();
@@ -12,30 +13,34 @@ const AppLayout = ({ children }: { children: JSX.Element }) => {
     case "/user":
       return (
         <AuthContextProvider>
-          <>{children}</>
+          <NotificationProvider>
+            <>{children}</>
+          </NotificationProvider>
         </AuthContextProvider>
       );
     default:
       return (
         <AuthContextProvider>
           <SidebarContextProvider>
-            <Layout style={{ background: "white" }}>
-              <Header />
-              <Layout hasSider>
-                <Sidebar />
-                {/* <Layout.Content> */}
-                <Layout
-                  style={{
-                    background: "white",
-                    overflow: "auto",
-                    height: "calc(100vh - 56px)",
-                  }}
-                >
-                  {children}
+            <NotificationProvider>
+              <Layout style={{ background: "white" }}>
+                <Header />
+                <Layout hasSider>
+                  <Sidebar />
+                  {/* <Layout.Content> */}
+                  <Layout
+                    style={{
+                      background: "white",
+                      overflow: "auto",
+                      height: "calc(100vh - 56px)",
+                    }}
+                  >
+                    {children}
+                  </Layout>
+                  {/* </Layout.Content> */}
                 </Layout>
-                {/* </Layout.Content> */}
               </Layout>
-            </Layout>
+            </NotificationProvider>
           </SidebarContextProvider>
         </AuthContextProvider>
       );

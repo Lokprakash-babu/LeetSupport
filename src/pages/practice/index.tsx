@@ -15,6 +15,7 @@ import Link from "next/link";
 import Unauthenticated from "@/components/Unauthenticated";
 import { useAuth } from "@/components/Auth";
 import { useSidebarContext } from "@/components/Sidebar";
+import Loader from "@/components/Loader";
 interface DataType {
   key: string;
   name: string;
@@ -185,7 +186,7 @@ const Practice = () => {
   }, [activeFilterTag]);
 
   if (authLoading) {
-    return <p>Loading...</p>;
+    return <Loader />;
   }
 
   if (!authenticatedUser?.username && !authLoading) {

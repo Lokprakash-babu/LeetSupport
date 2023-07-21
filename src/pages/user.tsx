@@ -1,5 +1,6 @@
 import { useAuth } from "@/components/Auth";
 import Auth from "@/components/Auth/Auth";
+import Loader from "@/components/Loader";
 import styles from "@styles/user.module.css";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -24,7 +25,7 @@ const User = () => {
   }, []);
 
   if (isLoading) {
-    return <p>Loading...</p>;
+    return <Loader />;
   }
   if (authenticatedUser?.username && !isLoading) {
     router.replace("/practice");
