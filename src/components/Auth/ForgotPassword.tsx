@@ -2,6 +2,7 @@ import { Button, Form, Input } from "antd";
 import { useState } from "react";
 import styles from "./auth.module.css";
 import { useAuth } from ".";
+import { useNotificationContext } from "../Notification";
 
 const VerificationCode = ({
   email,
@@ -23,7 +24,7 @@ const VerificationCode = ({
     setIsLoading(true);
 
     try {
-      const response = await forgotPasswordCodeSubmit?.({
+      await forgotPasswordCodeSubmit?.({
         code: values.code,
         newPassword: values.newPassword,
         email: email,
@@ -105,11 +106,20 @@ const ForgotPassword = ({ goBackToLogin }: { goBackToLogin: () => void }) => {
   const [email, setEmail] = useState("");
   const [showVerificationCode, setShowVerificationCode] = useState(false);
   const { forgotPasswordEmailSubmit } = useAuth();
+  const { errorNotification } = useNotificationContext();
   const sendVerificationCode = async (email: string) => {
-    setIsLoading(true);
-    await forgotPasswordEmailSubmit?.(email);
-    setIsLoading(false);
-    setShowVerificationCode(true);
+    try {
+      setIsLoading(true);
+      await forgotPasswordEmailSubmit?.(email);
+      setIsLoading(false);
+      setShowVerificationCode(true);
+    } catch (err: any) {
+      errorNotification?.({
+        title: err.message,
+        description: "",
+      });
+      setIsLoading(false);
+    }
   };
 
   if (showVerificationCode) {

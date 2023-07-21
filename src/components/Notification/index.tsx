@@ -8,6 +8,7 @@ export interface INotificationContext {
     title: string;
     description: string;
   }) => void;
+  errorNotification?: (message: { title: string; description: string }) => void;
 }
 export const NotificationContext = createContext<INotificationContext>({});
 const NotificationProvider = ({ children }: { children: any }) => {
@@ -31,10 +32,18 @@ const NotificationProvider = ({ children }: { children: any }) => {
   }) => {
     openNotificationWithIcon("warning", message);
   };
+  const errorNotification = (message: {
+    title: string;
+    description: string;
+  }) => {
+    openNotificationWithIcon("error", message);
+  };
+
   return (
     <NotificationContext.Provider
       value={{
         warningNotification,
+        errorNotification,
       }}
     >
       {contextHolder}

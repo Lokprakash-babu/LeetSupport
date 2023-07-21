@@ -4,37 +4,87 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { useRouter } from "next/router";
 import { useAuth } from ".";
+import PasswordValidator from "../PasswordValidator";
+import { useNotificationContext } from "../Notification";
 const Signup = ({ onLoginClick }: { onLoginClick: () => any }) => {
-  const { signUp, confirmSignUp, signIn, resendConfirmationCode, authLoading } =
-    useAuth();
+  const {
+    signUp,
+    confirmSignUp,
+    signIn,
+    resendConfirmationCode,
+    authLoading,
+    setAuthLoading,
+  } = useAuth();
   const [showVerificationCode, setShowVerificationCode] = useState({
     email: "",
   });
+
+  const [form] = Form.useForm();
+  const passwordEntered = Form.useWatch("password", form);
+  const { errorNotification } = useNotificationContext();
   const [password, setPassword] = useState("");
   const SignupUser = async (value: any) => {
-    setPassword(value.password);
-    await signUp?.({ ...value });
-    setShowVerificationCode({
-      email: value.email,
-    });
+    try {
+      setPassword(value.password);
+      await signUp?.({ ...value });
+      setShowVerificationCode({
+        email: value.email,
+      });
+    } catch (err: any) {
+      errorNotification?.({
+        title: err.message,
+        description: "",
+      });
+      setAuthLoading?.(false);
+    }
   };
-
+  const uppercaseRegex = /[A-Z]/;
+  const numberRegex = /\d/;
+  const specialCharRegex = /[!@#$%^&*()_+{}\[\]:;<>,.?~`]/;
+  const isPasswordValid =
+    uppercaseRegex.test(passwordEntered) &&
+    numberRegex.test(passwordEntered) &&
+    specialCharRegex.test(passwordEntered);
   const router = useRouter();
   const confirmUser = async (value: any) => {
-    await confirmSignUp?.({
-      username: showVerificationCode.email,
-      code: value.verificationCode,
-    });
-    await signInUser();
-    router.replace("/practice");
+    try {
+      await confirmSignUp?.({
+        username: showVerificationCode.email,
+        code: value.verificationCode,
+      });
+      await signInUser();
+      router.replace("/practice");
+    } catch (err: any) {
+      errorNotification?.({
+        title: err.message,
+        description: "",
+      });
+      setAuthLoading?.(false);
+    }
   };
 
   const resendVerificationCode = async () => {
-    await resendConfirmationCode?.(showVerificationCode.email);
+    try {
+      await resendConfirmationCode?.(showVerificationCode.email);
+    } catch (err: any) {
+      errorNotification?.({
+        title: err.message,
+        description: "",
+      });
+      setAuthLoading?.(false);
+    }
   };
 
   const signInUser = async () => {
-    await signIn?.({ password, email: showVerificationCode.email });
+    try {
+      await signIn?.({ password, email: showVerificationCode.email });
+    } catch (err: any) {
+      errorNotification?.({
+        title: err.message,
+        description: "",
+      });
+      setAuthLoading?.(false);
+    }
   };
   return (
     <>
@@ -114,6 +164,7 @@ const Signup = ({ onLoginClick }: { onLoginClick: () => any }) => {
             onFinish={SignupUser}
             layout="vertical"
             disabled={authLoading}
+            form={form}
           >
             <Form.Item
               name="email"
@@ -123,6 +174,10 @@ const Signup = ({ onLoginClick }: { onLoginClick: () => any }) => {
                   required: true,
                   message: "Please enter an Email",
                 },
+                {
+                  type: "email",
+                  message: "The input is not valid E-mail!",
+                },
               ]}
               className={`${styles.inputContainer} ${styles.emailInputContainer}`}
             >
@@ -130,7 +185,7 @@ const Signup = ({ onLoginClick }: { onLoginClick: () => any }) => {
             </Form.Item>
             <Form.Item
               name="password"
-              label={"Password"}
+              label={"New Password"}
               rules={[
                 {
                   required: true,
@@ -141,12 +196,17 @@ const Signup = ({ onLoginClick }: { onLoginClick: () => any }) => {
             >
               <Input.Password placeholder="*******" />
             </Form.Item>
+            {passwordEntered && (
+              <PasswordValidator password={passwordEntered || ""} />
+            )}
+
             <Form.Item>
               <Button
                 type="primary"
                 htmlType="submit"
                 className={styles.btnContainer}
                 loading={authLoading}
+                disabled={!isPasswordValid}
               >
                 Sign up!
               </Button>

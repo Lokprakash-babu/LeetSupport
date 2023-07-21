@@ -3,6 +3,7 @@ import styles from "./auth.module.css";
 import { useState } from "react";
 import ForgotPassword from "./ForgotPassword";
 import { useAuth } from ".";
+import { useNotificationContext } from "../Notification";
 
 export interface ILogin {
   onSignupClick: () => void;
@@ -13,7 +14,7 @@ const Login = ({ onSignupClick, onLoginSuccess }: ILogin) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const [forgotPassword, setForgotPassword] = useState(false);
-
+  const { errorNotification } = useNotificationContext();
   const loginUser = async (values: { email: string; password: string }) => {
     setIsLoading(true);
     try {
@@ -23,6 +24,10 @@ const Login = ({ onSignupClick, onLoginSuccess }: ILogin) => {
     } catch (error: any) {
       setIsLoading(false);
       setError(error.message);
+      errorNotification?.({
+        title: error.message,
+        description: "",
+      });
     }
     setIsLoading(false);
   };

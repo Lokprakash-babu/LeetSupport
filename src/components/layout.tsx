@@ -13,7 +13,9 @@ const AppLayout = ({ children }: { children: JSX.Element }) => {
     case "/user":
       return (
         <AuthContextProvider>
-          <>{children}</>
+          <NotificationProvider>
+            <>{children}</>
+          </NotificationProvider>
         </AuthContextProvider>
       );
     default:

@@ -110,3 +110,20 @@ pre {
   justify-content: space-between;
   align-items: center;
 }
+.passwordValidator {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+.validationMessageContainer {
+  display: flex;
+  gap: 0.25rem;
+  align-items: center;
+}
+.success {
+  color: green;
+}
+.nonSuccess {
+  color: red;
+}
