@@ -2,6 +2,7 @@ import { IUsePaginateQuery, usePaginateQuery } from "@/hooks/usePaginateQuery";
 import Error from "./Error";
 import FetchmoreLoader from "./FetchmoreLoader";
 import { Empty } from "antd";
+import Loader from "./Loader";
 
 export interface IColumnConfig {
   key: string;
@@ -28,7 +29,7 @@ const PaginatedTable = ({
   });
 
   if (loading) {
-    return <p>Loading...</p>;
+    return <Loader />;
   }
 
   if (error) {

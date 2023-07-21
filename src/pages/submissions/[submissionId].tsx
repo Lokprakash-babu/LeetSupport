@@ -11,6 +11,7 @@ import { useRouter } from "next/router";
 import { useEffect, useMemo } from "react";
 import styles from "@styles/[submissionId].module.css";
 import ChatMessenger from "@/components/AnswerSection/ChatSection/ChatMessenger";
+import Loader from "@/components/Loader";
 const SubmissionDetails = () => {
   const router = useRouter();
   const { submissionId } = router.query;
@@ -38,7 +39,7 @@ const SubmissionDetails = () => {
     return <Error />;
   }
   if (loading) {
-    return <p>Loading...</p>;
+    return <Loader />;
   }
   if (!submissionId || !data) {
     return <NotFound />;

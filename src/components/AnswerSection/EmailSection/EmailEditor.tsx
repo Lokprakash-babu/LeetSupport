@@ -3,6 +3,7 @@ import dynamic from "next/dynamic";
 import { useState } from "react";
 import EmailFooter from "./EmailFooter";
 import { ISubmissionHandler } from "@/pages/practice/[practiceId]";
+import { useNotificationContext } from "@/components/Notification";
 const QuillNoSSRWrapper = dynamic(import("react-quill"), {
   ssr: false,
   loading: () => <p>Loading ...</p>,
@@ -16,7 +17,7 @@ const EmailEditor = (props: IEmailEditor) => {
   const [emailValue, setEmailValue] = useState(props.initialValue || "");
 
   const [onlyTextContent, setOnlyTextContent] = useState("");
-
+  const { warningNotification } = useNotificationContext();
   return (
     <>
       <QuillNoSSRWrapper
@@ -52,12 +53,25 @@ const EmailEditor = (props: IEmailEditor) => {
         <EmailFooter
           textContent={onlyTextContent}
           onClick={() => {
-            if (onlyTextContent.length >= 2) {
+            if (
+              onlyTextContent.length >= 250 &&
+              onlyTextContent.length <= 500
+            ) {
               props?.onSubmit?.({
                 email: {
                   formattedContent: emailValue,
                   unFormattedContent: onlyTextContent,
                 },
+              });
+            } else {
+              const title =
+                onlyTextContent.length > 500
+                  ? "Email Content is too long"
+                  : "Email Content is too short";
+
+              warningNotification?.({
+                title: title,
+                description: "",
               });
             }
           }}

@@ -17,6 +17,7 @@ import Error from "@/components/Error";
 import SubmissionSummary from "@/components/Submission/SubmissionSummary";
 import { problems } from "@/constants/problems";
 import { chatSubmissionHandler } from "@/utils/chatSubmissionHandler";
+import Loader from "@/components/Loader";
 
 export interface ISubmissionHandler {
   chat?: IChatMessages[];
@@ -96,7 +97,7 @@ const PracticeDetails = () => {
   }, []);
 
   if (authLoading) {
-    return <p>Loading...</p>;
+    return <Loader />;
   }
   if (!practiceProblem) {
     return <NotFound />;
