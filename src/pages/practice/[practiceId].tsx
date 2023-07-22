@@ -18,6 +18,7 @@ import SubmissionSummary from "@/components/Submission/SubmissionSummary";
 import { problems } from "@/constants/problems";
 import { chatSubmissionHandler } from "@/utils/chatSubmissionHandler";
 import Loader from "@/components/Loader";
+import Unauthenticated from "@/components/Unauthenticated";
 
 export interface ISubmissionHandler {
   chat?: IChatMessages[];
@@ -33,7 +34,13 @@ const AnswerContainer = (props: {
   const { problem } = props;
   const problemType = problem.category.category;
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const { authenticatedUser } = useAuth();
+  const {
+    authenticatedUser,
+    isUserLoggedIn,
+    authLoading,
+    setAuthenticatedUser,
+    setAuthLoading,
+  } = useAuth();
   const [error, setError] = useState("");
   const onSubmitHandler = async (value?: ISubmissionHandler) => {
     setIsSubmitting(true);
@@ -61,6 +68,21 @@ const AnswerContainer = (props: {
     }
   };
 
+  const whoAmI = async () => {
+    try {
+      await isUserLoggedIn?.();
+    } catch (e) {
+      setAuthenticatedUser?.(null);
+      setAuthLoading?.(false);
+    }
+  };
+  useEffect(() => {
+    whoAmI();
+  }, []);
+
+  if (!authenticatedUser?.username && !authLoading) {
+    return <Unauthenticated />;
+  }
   if (isSubmitting) {
     return <p>Your response is being submitted...</p>;
   }

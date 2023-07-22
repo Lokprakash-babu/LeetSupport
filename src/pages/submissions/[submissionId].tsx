@@ -12,17 +12,19 @@ import { useEffect, useMemo } from "react";
 import styles from "@styles/[submissionId].module.css";
 import ChatMessenger from "@/components/AnswerSection/ChatSection/ChatMessenger";
 import Loader from "@/components/Loader";
+import { useAuth } from "@/components/Auth";
+import Unauthenticated from "@/components/Unauthenticated";
 const SubmissionDetails = () => {
   const router = useRouter();
   const { submissionId } = router.query;
 
-  //   const queryOptions = useMemo(() => {
-  //     return {
-  //       variables: {
-  //         id: submissionId as string,
-  //       },
-  //     };
-  //   }, [submissionId]);
+  const {
+    isUserLoggedIn,
+    setAuthLoading,
+    setAuthenticatedUser,
+    authenticatedUser,
+    authLoading,
+  } = useAuth();
   const { data, error, loading, queryHandler } = useQuery(GET_SUBMISSION);
 
   useEffect(() => {
@@ -34,7 +36,21 @@ const SubmissionDetails = () => {
       });
     }
   }, [submissionId]);
+  const whoAmI = async () => {
+    try {
+      await isUserLoggedIn?.();
+    } catch (e) {
+      setAuthenticatedUser?.(null);
+      setAuthLoading?.(false);
+    }
+  };
+  useEffect(() => {
+    whoAmI();
+  }, []);
 
+  if (!authenticatedUser?.username && !authLoading) {
+    return <Unauthenticated />;
+  }
   if (error) {
     return <Error />;
   }

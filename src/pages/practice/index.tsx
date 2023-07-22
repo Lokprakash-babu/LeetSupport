@@ -86,19 +86,19 @@ const practiceProblems = [
     difficulty: "Medium",
     avgTime: "2 mins",
   },
-  {
-    key: "3",
-    title: {
-      text: "Sales and difficult customer",
-      link: "sales-and-difficult-customer",
-    },
-    category: {
-      text: "Sales",
-      category: "sales",
-    },
-    difficulty: "Hard",
-    avgTime: "10 mins",
-  },
+  // {
+  //   key: "3",
+  //   title: {
+  //     text: "Sales and difficult customer",
+  //     link: "sales-and-difficult-customer",
+  //   },
+  //   category: {
+  //     text: "Sales",
+  //     category: "sales",
+  //   },
+  //   difficulty: "Hard",
+  //   avgTime: "10 mins",
+  // },
 ];
 
 const comingSoonInfo: IComingSoonCard[] = [
@@ -155,13 +155,13 @@ const Practice = () => {
 
       activeIdentifier: "email",
     },
-    {
-      filterText: "Sales",
-      onClick() {
-        setActiveFilterTag("sales");
-      },
-      activeIdentifier: "sales",
-    },
+    // {
+    //   filterText: "Sales",
+    //   onClick() {
+    //     setActiveFilterTag("sales");
+    //   },
+    //   activeIdentifier: "sales",
+    // },
   ];
 
   const whoAmI = async () => {

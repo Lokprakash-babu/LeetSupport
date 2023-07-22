@@ -1,22 +1,22 @@
 {
   "staging": {
     "awscloudformation": {
-      "AuthRoleName": "amplify-leetsupport-staging-130441-authRole",
-      "UnauthRoleArn": "arn:aws:iam::276291213765:role/amplify-leetsupport-staging-130441-unauthRole",
-      "AuthRoleArn": "arn:aws:iam::276291213765:role/amplify-leetsupport-staging-130441-authRole",
+      "AuthRoleName": "amplify-leetsupport2-staging-114343-authRole",
+      "UnauthRoleArn": "arn:aws:iam::276291213765:role/amplify-leetsupport2-staging-114343-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::276291213765:role/amplify-leetsupport2-staging-114343-authRole",
       "Region": "ap-south-1",
-      "DeploymentBucketName": "amplify-leetsupport-staging-130441-deployment",
-      "UnauthRoleName": "amplify-leetsupport-staging-130441-unauthRole",
-      "StackName": "amplify-leetsupport-staging-130441",
-      "StackId": "arn:aws:cloudformation:ap-south-1:276291213765:stack/amplify-leetsupport-staging-130441/5417def0-23d9-11ee-b4d6-0acd2a68c53e",
-      "AmplifyAppId": "d27vt63jzop1u3"
+      "DeploymentBucketName": "amplify-leetsupport2-staging-114343-deployment",
+      "UnauthRoleName": "amplify-leetsupport2-staging-114343-unauthRole",
+      "StackName": "amplify-leetsupport2-staging-114343",
+      "StackId": "arn:aws:cloudformation:ap-south-1:276291213765:stack/amplify-leetsupport2-staging-114343/030ba400-2885-11ee-bf76-025148d06844",
+      "AmplifyAppId": "d2hqg02y80w3gn"
     },
     "categories": {
       "auth": {
-        "leetsupport": {}
+        "leetsupport2": {}
       },
       "api": {
-        "leetsupport": {}
+        "leetsupport2": {}
       }
     }
   }

@@ -1,10 +1,10 @@
 {
-  "AppSyncApiName": "leetsupport",
+  "AppSyncApiName": "leetsupport2",
   "DynamoDBBillingMode": "PAY_PER_REQUEST",
   "DynamoDBEnableServerSideEncryption": false,
   "AuthCognitoUserPoolId": {
     "Fn::GetAtt": [
-      "authleetsupport",
+      "authleetsupport2",
       "Outputs.UserPoolId"
     ]
   }
