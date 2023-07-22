@@ -1,13 +1,13 @@
 {
   "api": {
-    "leetsupport": {
+    "leetsupport2": {
       "dependsOn": [
         {
           "attributes": [
             "UserPoolId"
           ],
           "category": "auth",
-          "resourceName": "leetsupport"
+          "resourceName": "leetsupport2"
         }
       ],
       "output": {
@@ -19,7 +19,7 @@
             {
               "authenticationType": "AMAZON_COGNITO_USER_POOLS",
               "userPoolConfig": {
-                "userPoolId": "authleetsupport"
+                "userPoolId": "authleetsupport2"
               }
             }
           ],
@@ -37,7 +37,7 @@
     }
   },
   "auth": {
-    "leetsupport": {
+    "leetsupport2": {
       "customAuth": false,
       "dependsOn": [],
       "frontendAuthConfig": {
