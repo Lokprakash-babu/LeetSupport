@@ -19,6 +19,7 @@ import { chatSubmissionHandler } from "@/utils/chatSubmissionHandler";
 import Loader from "@/components/Loader";
 import Unauthenticated from "@/components/Unauthenticated";
 import SubmissionsTable from "@/components/Submission/SubmissionsTable";
+import Illustration from "@/components/Illustrations/Illustration";
 
 export interface ISubmissionHandler {
   chat?: IChatMessages[];
@@ -84,7 +85,26 @@ const AnswerContainer = (props: {
     return <Unauthenticated />;
   }
   if (isSubmitting) {
-    return <p>Your response is being submitted...</p>;
+    return (
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+        }}
+      >
+        <Illustration name="customer-support" />
+        <h2
+          style={{
+            textAlign: "center",
+            marginTop: "1rem",
+            width: "50%",
+          }}
+        >
+          Your response is being submitted! This might take a while...
+        </h2>
+      </div>
+    );
   }
   if (error) {
     return <Error />;
