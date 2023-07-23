@@ -6,15 +6,9 @@ import { useRouter } from "next/router";
 import { useAuth } from ".";
 import PasswordValidator from "../PasswordValidator";
 import { useNotificationContext } from "../Notification";
+import ConfirmAccount from "./ConfirmAccount";
 const Signup = ({ onLoginClick }: { onLoginClick: () => any }) => {
-  const {
-    signUp,
-    confirmSignUp,
-    signIn,
-    resendConfirmationCode,
-    authLoading,
-    setAuthLoading,
-  } = useAuth();
+  const { signUp, signIn, authLoading, setAuthLoading } = useAuth();
   const [showVerificationCode, setShowVerificationCode] = useState({
     email: "",
   });
@@ -46,35 +40,6 @@ const Signup = ({ onLoginClick }: { onLoginClick: () => any }) => {
     numberRegex.test(passwordEntered) &&
     specialCharRegex.test(passwordEntered);
   const router = useRouter();
-  const confirmUser = async (value: any) => {
-    try {
-      await confirmSignUp?.({
-        username: showVerificationCode.email,
-        code: value.verificationCode,
-      });
-      await signInUser();
-      router.replace("/practice");
-    } catch (err: any) {
-      errorNotification?.({
-        title: err.message,
-        description: "",
-      });
-      setAuthLoading?.(false);
-    }
-  };
-
-  const resendVerificationCode = async () => {
-    try {
-      await resendConfirmationCode?.(showVerificationCode.email);
-    } catch (err: any) {
-      errorNotification?.({
-        title: err.message,
-        description: "",
-      });
-      setAuthLoading?.(false);
-    }
-  };
-
   const signInUser = async () => {
     try {
       await signIn?.({ password, email: showVerificationCode.email });
@@ -102,53 +67,13 @@ const Signup = ({ onLoginClick }: { onLoginClick: () => any }) => {
         </p>
       </div>
       {showVerificationCode.email && (
-        <motion.div>
-          <div className={styles.verificationEmailContainer}>
-            Please enter the verification code sent to
-            <br />
-            <b>{showVerificationCode.email}</b>
-          </div>
-          <Form
-            className={styles.formContainer}
-            onFinish={confirmUser}
-            layout="vertical"
-            disabled={authLoading}
-          >
-            <Form.Item
-              name="verificationCode"
-              label={"Verification Code"}
-              rules={[
-                {
-                  required: true,
-                  message: "Verification Code is required",
-                },
-              ]}
-              className={styles.inputContainer}
-            >
-              <Input placeholder="12345" />
-            </Form.Item>
-            <div>
-              Didn&apos;t receive code{" "}
-              <Button
-                type="link"
-                onClick={resendVerificationCode}
-                loading={authLoading}
-              >
-                Resend Code
-              </Button>
-            </div>
-            <Form.Item>
-              <Button
-                type="primary"
-                htmlType="submit"
-                className={styles.nextBtn}
-                loading={authLoading}
-              >
-                Verify!
-              </Button>
-            </Form.Item>
-          </Form>
-        </motion.div>
+        <ConfirmAccount
+          defaultEmail={showVerificationCode.email}
+          onSuccessfullConfirm={async () => {
+            await signInUser();
+            router.replace("/practice");
+          }}
+        />
       )}
       {!showVerificationCode.email && (
         <motion.div

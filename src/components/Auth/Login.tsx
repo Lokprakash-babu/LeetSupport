@@ -4,33 +4,50 @@ import { useState } from "react";
 import ForgotPassword from "./ForgotPassword";
 import { useAuth } from ".";
 import { useNotificationContext } from "../Notification";
+import ConfirmAccount from "./ConfirmAccount";
 
 export interface ILogin {
   onSignupClick: () => void;
   onLoginSuccess: () => void;
 }
 const Login = ({ onSignupClick, onLoginSuccess }: ILogin) => {
-  const { signIn } = useAuth();
+  const { signIn, setAuthLoading } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState("");
   const [forgotPassword, setForgotPassword] = useState(false);
   const { errorNotification } = useNotificationContext();
+  const [showConfirmAccount, setShowConfirmAccount] = useState(false);
   const loginUser = async (values: { email: string; password: string }) => {
     setIsLoading(true);
     try {
       await signIn?.({ ...values });
-      setError("");
       onLoginSuccess();
+      setIsLoading(false);
+      setAuthLoading?.(false);
     } catch (error: any) {
       setIsLoading(false);
-      setError(error.message);
+      setAuthLoading?.(false);
       errorNotification?.({
         title: error.message,
         description: "",
       });
     }
-    setIsLoading(false);
   };
+  if (showConfirmAccount) {
+    return (
+      <ConfirmAccount
+        onSuccessfullConfirm={() => {
+          setForgotPassword(false);
+          setShowConfirmAccount(false);
+        }}
+        onSignUp={() => {
+          onSignupClick();
+        }}
+        onLogin={() => {
+          window?.location?.reload();
+        }}
+      />
+    );
+  }
   if (forgotPassword) {
     return (
       <ForgotPassword
@@ -53,7 +70,6 @@ const Login = ({ onSignupClick, onLoginSuccess }: ILogin) => {
             <h2>Login</h2>
             <p>Welcome back!</p>
           </div>
-          {error && <div className={styles.error}>{error}</div>}
         </div>
         <Form.Item
           name="email"
@@ -86,7 +102,6 @@ const Login = ({ onSignupClick, onLoginSuccess }: ILogin) => {
             type="link"
             className={styles.forgotPassword}
             onClick={() => {
-              setError("");
               setForgotPassword(true);
             }}
           >
@@ -113,11 +128,25 @@ const Login = ({ onSignupClick, onLoginSuccess }: ILogin) => {
             type="link"
             onClick={() => {
               onSignupClick();
-              setError("");
             }}
             className={styles.backIngressBtn}
           >
             Sign Up!
+          </Button>
+        </div>
+      </div>
+      <div className={styles.signupContainer}>
+        <div>
+          Forgot to verify your account?{" "}
+          <Button
+            type="link"
+            onClick={() => {
+              setShowConfirmAccount(true);
+              setForgotPassword(false);
+            }}
+            className={styles.backIngressBtn}
+          >
+            Verify Now!
           </Button>
         </div>
       </div>
