@@ -14,11 +14,11 @@ import { useSidebarContext } from "@/components/Sidebar";
 import { useEffect, useState } from "react";
 import { emailSubmissionHandler } from "@/utils/emailSubmissionHandler";
 import Error from "@/components/Error";
-import SubmissionSummary from "@/components/Submission/SubmissionSummary";
 import { problems } from "@/constants/problems";
 import { chatSubmissionHandler } from "@/utils/chatSubmissionHandler";
 import Loader from "@/components/Loader";
 import Unauthenticated from "@/components/Unauthenticated";
+import SubmissionsTable from "@/components/Submission/SubmissionsTable";
 
 export interface ISubmissionHandler {
   chat?: IChatMessages[];
@@ -105,18 +105,38 @@ const AnswerContainer = (props: {
       return <></>;
   }
 };
+
+const tabItems = [
+  {
+    key: "description",
+    label: "Description",
+  },
+  {
+    key: "submissions",
+    label: "Submissions",
+  },
+];
+
 const PracticeDetails = () => {
   const router = useRouter();
-  const { practiceId = "" } = router.query;
+  const { practiceId, tab = "description" } = router.query;
+
   //@ts-ignore
   const practiceProblem = problems[practiceId];
   const { collapseSidebar } = useSidebarContext();
-  const [activeKey, setActiveKey] = useState("description");
-  const { authenticatedUser, authLoading } = useAuth();
+  const { authLoading } = useAuth();
 
   useEffect(() => {
     collapseSidebar?.();
   }, []);
+
+  useEffect(() => {
+    const isDescriptionTab = (tab as string) === "description";
+    const isSubmissionTab = (tab as string) === "submissions";
+    if (practiceId && !isDescriptionTab && practiceId && !isSubmissionTab) {
+      router.push(`/practice/${practiceId}?tab=description`);
+    }
+  }, [practiceId]);
 
   if (authLoading) {
     return <Loader />;
@@ -124,27 +144,6 @@ const PracticeDetails = () => {
   if (!practiceProblem) {
     return <NotFound />;
   }
-
-  const tabItems = [
-    {
-      key: "description",
-      label: "Description",
-      children: (
-        <ProblemSection
-          category={practiceProblem.category.category}
-          companiesAskedIn={["Amazon"]}
-          description={practiceProblem.problemDescription}
-          difficulty={practiceProblem.difficulty}
-          expectations={practiceProblem.expectations}
-        />
-      ),
-    },
-    {
-      key: "submissions",
-      label: "Submissions",
-      children: <SubmissionSummary problemId={practiceProblem.id} />,
-    },
-  ];
 
   return (
     <div>
@@ -157,19 +156,33 @@ const PracticeDetails = () => {
         <div className={styles.container}>
           <div className={styles.problemSection}>
             <Tabs
-              defaultActiveKey="description"
+              defaultActiveKey={tab as string}
               items={tabItems}
-              activeKey={activeKey}
+              activeKey={tab as string}
               onTabClick={(tabKey) => {
-                setActiveKey(tabKey);
+                router.push(`/practice/${practiceId}?tab=${tabKey}`);
               }}
             />
+            {tab === "description" && (
+              <ProblemSection
+                category={practiceProblem.category.category}
+                companiesAskedIn={["Amazon"]}
+                description={practiceProblem.problemDescription}
+                difficulty={practiceProblem.difficulty}
+                expectations={practiceProblem.expectations}
+              />
+            )}
+            {tab === "submissions" && (
+              <SubmissionsTable problemId={practiceId as string} />
+            )}
           </div>
-          {activeKey !== "submissions" && (
+          {tab !== "submissions" && (
             <div className={styles.solutionSection}>
               <AnswerContainer
                 problem={practiceProblem}
-                onSuccessfulSubmit={() => setActiveKey("submissions")}
+                onSuccessfulSubmit={() => {
+                  router.push(`/practice/${practiceId}?tab=submissions`);
+                }}
               />
             </div>
           )}
