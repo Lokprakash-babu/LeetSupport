@@ -20,6 +20,7 @@ import Loader from "@/components/Loader";
 import Unauthenticated from "@/components/Unauthenticated";
 import SubmissionsTable from "@/components/Submission/SubmissionsTable";
 import Illustration from "@/components/Illustrations/Illustration";
+import { requireAuth } from "@/utils/requireAuth";
 
 export interface ISubmissionHandler {
   chat?: IChatMessages[];
@@ -35,13 +36,7 @@ const AnswerContainer = (props: {
   const { problem } = props;
   const problemType = problem.category.category;
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const {
-    authenticatedUser,
-    isUserLoggedIn,
-    authLoading,
-    setAuthenticatedUser,
-    setAuthLoading,
-  } = useAuth();
+  const { authenticatedUser } = useAuth();
   const [error, setError] = useState("");
   const onSubmitHandler = async (value?: ISubmissionHandler) => {
     setIsSubmitting(true);
@@ -69,21 +64,6 @@ const AnswerContainer = (props: {
     }
   };
 
-  const whoAmI = async () => {
-    try {
-      await isUserLoggedIn?.();
-    } catch (e) {
-      setAuthenticatedUser?.(null);
-      setAuthLoading?.(false);
-    }
-  };
-  useEffect(() => {
-    whoAmI();
-  }, []);
-
-  if (!authenticatedUser?.username && !authLoading) {
-    return <Unauthenticated />;
-  }
   if (isSubmitting) {
     return (
       <div
@@ -144,7 +124,6 @@ const PracticeDetails = () => {
   //@ts-ignore
   const practiceProblem = problems[practiceId];
   const { collapseSidebar } = useSidebarContext();
-  const { authLoading } = useAuth();
 
   useEffect(() => {
     collapseSidebar?.();
@@ -158,9 +137,6 @@ const PracticeDetails = () => {
     }
   }, [practiceId]);
 
-  if (authLoading) {
-    return <Loader />;
-  }
   if (!practiceProblem) {
     return <NotFound />;
   }
@@ -211,5 +187,5 @@ const PracticeDetails = () => {
     </div>
   );
 };
-
 export default PracticeDetails;
+export const getServerSideProps = requireAuth;

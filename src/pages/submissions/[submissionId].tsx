@@ -8,23 +8,15 @@ import { problems } from "@/constants/problems";
 import { GET_SUBMISSION } from "@/graphql/queries";
 import { useQuery } from "@/hooks/useQuery";
 import { useRouter } from "next/router";
-import { useEffect, useMemo } from "react";
+import { useEffect } from "react";
 import styles from "@styles/[submissionId].module.css";
 import ChatMessenger from "@/components/AnswerSection/ChatSection/ChatMessenger";
 import Loader from "@/components/Loader";
-import { useAuth } from "@/components/Auth";
-import Unauthenticated from "@/components/Unauthenticated";
+import { requireAuth } from "@/utils/requireAuth";
 const SubmissionDetails = () => {
   const router = useRouter();
   const { submissionId } = router.query;
 
-  const {
-    isUserLoggedIn,
-    setAuthLoading,
-    setAuthenticatedUser,
-    authenticatedUser,
-    authLoading,
-  } = useAuth();
   const { data, error, loading, queryHandler } = useQuery(GET_SUBMISSION);
 
   useEffect(() => {
@@ -36,21 +28,7 @@ const SubmissionDetails = () => {
       });
     }
   }, [submissionId]);
-  const whoAmI = async () => {
-    try {
-      await isUserLoggedIn?.();
-    } catch (e) {
-      setAuthenticatedUser?.(null);
-      setAuthLoading?.(false);
-    }
-  };
-  useEffect(() => {
-    whoAmI();
-  }, []);
 
-  if (!authenticatedUser?.username && !authLoading) {
-    return <Unauthenticated />;
-  }
   if (error) {
     return <Error />;
   }
@@ -117,3 +95,4 @@ const SubmissionDetails = () => {
 };
 
 export default SubmissionDetails;
+export const getServerSideProps = requireAuth;

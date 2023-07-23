@@ -12,10 +12,8 @@ import PageWrapper from "@/components/PageWrapper/PageWrapper";
 import Companies from "@/components/CompaniesTag";
 import FilterTag from "@/components/FilterTag/FilterTag";
 import Link from "next/link";
-import Unauthenticated from "@/components/Unauthenticated";
-import { useAuth } from "@/components/Auth";
 import { useSidebarContext } from "@/components/Sidebar";
-import Loader from "@/components/Loader";
+import { requireAuth } from "@/utils/requireAuth";
 interface DataType {
   key: string;
   name: string;
@@ -121,13 +119,7 @@ const comingSoonInfo: IComingSoonCard[] = [
 
 const Practice = () => {
   const [activeFilterTag, setActiveFilterTag] = useState("all");
-  const {
-    authenticatedUser,
-    isUserLoggedIn,
-    authLoading,
-    setAuthenticatedUser,
-    setAuthLoading,
-  } = useAuth();
+
   const { expandSidebar } = useSidebarContext();
 
   const FilterTagConfig = [
@@ -155,26 +147,9 @@ const Practice = () => {
 
       activeIdentifier: "email",
     },
-    // {
-    //   filterText: "Sales",
-    //   onClick() {
-    //     setActiveFilterTag("sales");
-    //   },
-    //   activeIdentifier: "sales",
-    // },
   ];
 
-  const whoAmI = async () => {
-    try {
-      await isUserLoggedIn?.();
-    } catch (e) {
-      setAuthenticatedUser?.(null);
-      setAuthLoading?.(false);
-    }
-  };
-
   useEffect(() => {
-    whoAmI();
     expandSidebar?.();
   }, []);
   const problemsSet = useMemo(() => {
@@ -185,13 +160,6 @@ const Practice = () => {
         );
   }, [activeFilterTag]);
 
-  if (authLoading) {
-    return <Loader />;
-  }
-
-  if (!authenticatedUser?.username && !authLoading) {
-    return <Unauthenticated />;
-  }
   return (
     <>
       <PageHead pageName="Practice" />
@@ -226,3 +194,4 @@ const Practice = () => {
 };
 
 export default Practice;
+export const getServerSideProps = requireAuth;

@@ -22,7 +22,6 @@ export const useQuery = (query: string) => {
         authMode: "AMAZON_COGNITO_USER_POOLS",
         variables: queryOptions.variables,
       });
-      console.log("response", response);
       setData(response);
       setLoading(false);
       setError("");
