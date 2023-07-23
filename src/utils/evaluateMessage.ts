@@ -1,3 +1,4 @@
+import { Auth } from "aws-amplify";
 import { IChatMessages } from "../components/AnswerSection/ChatSection/ChatSection";
 
 export const evaluateMessage = async ({
@@ -27,11 +28,13 @@ export const evaluateMessage = async ({
     model: "gpt-3.5-turbo",
     messages: messagePayload,
   };
-  const response = await fetch(`${process.env.NEXT_PUBLIC_OPENAI_URL}`, {
+  const access = await Auth.currentAuthenticatedUser();
+  const accessToken = access.signInUserSession.accessToken.jwtToken;
+  const response = await fetch(`${process.env.NEXT_PUBLIC_COMPLETION}`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${process.env.NEXT_PUBLIC_OPENAI_KEY}`,
+      Authorization: `Bearer ${accessToken}`,
     },
     body: JSON.stringify(evaluationPayload),
   });
