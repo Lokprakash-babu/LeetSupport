@@ -1,7 +1,7 @@
 import React, { useContext, useEffect } from "react";
 import { Auth } from "aws-amplify";
 import awsConfig from "../../aws-exports";
-Auth.configure(awsConfig);
+Auth.configure({ ...awsConfig, ssr: true });
 export interface IAuthArgs {
   email: string;
   password: string;

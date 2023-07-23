@@ -14,11 +14,13 @@ import { useSidebarContext } from "@/components/Sidebar";
 import { useEffect, useState } from "react";
 import { emailSubmissionHandler } from "@/utils/emailSubmissionHandler";
 import Error from "@/components/Error";
-import SubmissionSummary from "@/components/Submission/SubmissionSummary";
 import { problems } from "@/constants/problems";
 import { chatSubmissionHandler } from "@/utils/chatSubmissionHandler";
 import Loader from "@/components/Loader";
 import Unauthenticated from "@/components/Unauthenticated";
+import SubmissionsTable from "@/components/Submission/SubmissionsTable";
+import Illustration from "@/components/Illustrations/Illustration";
+import { requireAuth } from "@/utils/requireAuth";
 
 export interface ISubmissionHandler {
   chat?: IChatMessages[];
@@ -34,13 +36,7 @@ const AnswerContainer = (props: {
   const { problem } = props;
   const problemType = problem.category.category;
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const {
-    authenticatedUser,
-    isUserLoggedIn,
-    authLoading,
-    setAuthenticatedUser,
-    setAuthLoading,
-  } = useAuth();
+  const { authenticatedUser } = useAuth();
   const [error, setError] = useState("");
   const onSubmitHandler = async (value?: ISubmissionHandler) => {
     setIsSubmitting(true);
@@ -68,23 +64,27 @@ const AnswerContainer = (props: {
     }
   };
 
-  const whoAmI = async () => {
-    try {
-      await isUserLoggedIn?.();
-    } catch (e) {
-      setAuthenticatedUser?.(null);
-      setAuthLoading?.(false);
-    }
-  };
-  useEffect(() => {
-    whoAmI();
-  }, []);
-
-  if (!authenticatedUser?.username && !authLoading) {
-    return <Unauthenticated />;
-  }
   if (isSubmitting) {
-    return <p>Your response is being submitted...</p>;
+    return (
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+        }}
+      >
+        <Illustration name="customer-support" />
+        <h2
+          style={{
+            textAlign: "center",
+            marginTop: "1rem",
+            width: "50%",
+          }}
+        >
+          Your response is being submitted! This might take a while...
+        </h2>
+      </div>
+    );
   }
   if (error) {
     return <Error />;
@@ -105,46 +105,41 @@ const AnswerContainer = (props: {
       return <></>;
   }
 };
+
+const tabItems = [
+  {
+    key: "description",
+    label: "Description",
+  },
+  {
+    key: "submissions",
+    label: "Submissions",
+  },
+];
+
 const PracticeDetails = () => {
   const router = useRouter();
-  const { practiceId = "" } = router.query;
+  const { practiceId, tab = "description" } = router.query;
+
   //@ts-ignore
   const practiceProblem = problems[practiceId];
   const { collapseSidebar } = useSidebarContext();
-  const [activeKey, setActiveKey] = useState("description");
-  const { authenticatedUser, authLoading } = useAuth();
 
   useEffect(() => {
     collapseSidebar?.();
   }, []);
 
-  if (authLoading) {
-    return <Loader />;
-  }
+  useEffect(() => {
+    const isDescriptionTab = (tab as string) === "description";
+    const isSubmissionTab = (tab as string) === "submissions";
+    if (practiceId && !isDescriptionTab && practiceId && !isSubmissionTab) {
+      router.push(`/practice/${practiceId}?tab=description`);
+    }
+  }, [practiceId]);
+
   if (!practiceProblem) {
     return <NotFound />;
   }
-
-  const tabItems = [
-    {
-      key: "description",
-      label: "Description",
-      children: (
-        <ProblemSection
-          category={practiceProblem.category.category}
-          companiesAskedIn={["Amazon"]}
-          description={practiceProblem.problemDescription}
-          difficulty={practiceProblem.difficulty}
-          expectations={practiceProblem.expectations}
-        />
-      ),
-    },
-    {
-      key: "submissions",
-      label: "Submissions",
-      children: <SubmissionSummary problemId={practiceProblem.id} />,
-    },
-  ];
 
   return (
     <div>
@@ -157,19 +152,33 @@ const PracticeDetails = () => {
         <div className={styles.container}>
           <div className={styles.problemSection}>
             <Tabs
-              defaultActiveKey="description"
+              defaultActiveKey={tab as string}
               items={tabItems}
-              activeKey={activeKey}
+              activeKey={tab as string}
               onTabClick={(tabKey) => {
-                setActiveKey(tabKey);
+                router.push(`/practice/${practiceId}?tab=${tabKey}`);
               }}
             />
+            {tab === "description" && (
+              <ProblemSection
+                category={practiceProblem.category.category}
+                companiesAskedIn={["Amazon"]}
+                description={practiceProblem.problemDescription}
+                difficulty={practiceProblem.difficulty}
+                expectations={practiceProblem.expectations}
+              />
+            )}
+            {tab === "submissions" && (
+              <SubmissionsTable problemId={practiceId as string} />
+            )}
           </div>
-          {activeKey !== "submissions" && (
+          {tab !== "submissions" && (
             <div className={styles.solutionSection}>
               <AnswerContainer
                 problem={practiceProblem}
-                onSuccessfulSubmit={() => setActiveKey("submissions")}
+                onSuccessfulSubmit={() => {
+                  router.push(`/practice/${practiceId}?tab=submissions`);
+                }}
               />
             </div>
           )}
@@ -178,5 +187,5 @@ const PracticeDetails = () => {
     </div>
   );
 };
-
 export default PracticeDetails;
+export const getServerSideProps = requireAuth;
