@@ -1,3 +1,4 @@
+import { Auth } from "aws-amplify";
 import {
   IChatMessages,
   chatPersonas,
@@ -27,23 +28,18 @@ export const postMessage = async (
       model: "gpt-3.5-turbo",
       messages: messagePayload,
     };
-    const response = await fetch(`${process.env.NEXT_PUBLIC_OPENAI_URL}`, {
+    const access = await Auth.currentAuthenticatedUser();
+    const accessToken = access.signInUserSession.accessToken.jwtToken;
+    const response = await fetch(`${process.env.NEXT_PUBLIC_COMPLETION}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${process.env.NEXT_PUBLIC_OPENAI_KEY}`,
+        Authorization: `Bearer ${accessToken}`,
       },
       body: JSON.stringify(chatPayload),
     });
     const jsonResponse = await response.json();
-    //   const jsonResponse = {
-    //     choices: [
-    //       {
-    //         role: "assistant",
-    //         message: "I am a customer who received wrong pizza order",
-    //       },
-    //     ],
-    //   };
+
     const returnResponse = jsonResponse.choices[0].message;
     return returnResponse;
   } catch (err) {
