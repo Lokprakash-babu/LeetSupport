@@ -1,6 +1,6 @@
 import PageHead from "@/components/PageHead/PageHead";
 import PageWrapper from "@/components/PageWrapper/PageWrapper";
-import { useSidebarContext } from "@/components/Sidebar";
+import { useSidebarContext } from "@/components/Sidebar/Sidebar";
 import SubmissionsTable from "@/components/Submission/SubmissionsTable";
 import { requireAuth } from "@/utils/requireAuth";
 
@@ -15,7 +15,7 @@ const Submissions = () => {
 
   return (
     <>
-      <PageHead pageName="Submissions" />
+      {/* <PageHead pageName="Submissions" /> */}
       <PageWrapper>
         <SubmissionsTable maxHeight="80vh" withProblemColumn />
       </PageWrapper>

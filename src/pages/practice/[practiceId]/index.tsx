@@ -10,7 +10,7 @@ import NotFound from "@/components/NotFound/NotFound";
 import EmailSection from "@/components/AnswerSection/EmailSection/EmailSection";
 import { useAuth } from "@/components/Auth";
 import { Tabs } from "antd";
-import { useSidebarContext } from "@/components/Sidebar";
+import { useSidebarContext } from "@/components/Sidebar/Sidebar";
 import { useEffect, useState } from "react";
 import { emailSubmissionHandler } from "@/utils/emailSubmissionHandler";
 import Error from "@/components/Error";

@@ -127,3 +127,32 @@ pre {
 .nonSuccess {
   color: red;
 }
+
+.paginatedTable {
+  display: table;
+}
+
+.mobileTable {
+  display: none;
+}
+
+@media screen and (max-width: 900px) {
+  .paginatedTable {
+    display: none;
+  }
+  .mobileTable {
+    display: block;
+  }
+  .mobileTableItem {
+    padding: 1rem;
+    border-bottom: 1px solid #e0e0e0;
+  }
+  .mobileColumn {
+    margin-bottom: 0.5rem;
+  }
+  .mobileTitle {
+    font-size: 16px;
+    line-height: 24px;
+    font-weight: 500;
+  }
+}

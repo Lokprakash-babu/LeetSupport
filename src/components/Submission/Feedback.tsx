@@ -30,7 +30,8 @@ const Feedback = ({ tone, language, overall }: IFeedback) => {
   return (
     <Collapse
       items={collapsibleItems}
-      defaultActiveKey={["languageFeedback"]}
+      defaultActiveKey={["overallFeedback"]}
+      accordion
     />
   );
 };

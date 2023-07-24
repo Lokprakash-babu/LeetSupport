@@ -12,15 +12,8 @@ import PageWrapper from "@/components/PageWrapper/PageWrapper";
 import Companies from "@/components/CompaniesTag";
 import FilterTag from "@/components/FilterTag/FilterTag";
 import Link from "next/link";
-import { useSidebarContext } from "@/components/Sidebar";
+import { useSidebarContext } from "@/components/Sidebar/Sidebar";
 import { requireAuth } from "@/utils/requireAuth";
-interface DataType {
-  key: string;
-  name: string;
-  age: number;
-  address: string;
-  tags: string[];
-}
 
 const practiceTableColumn = [
   {
@@ -48,12 +41,14 @@ const practiceTableColumn = [
     title: "Avg.Time",
     key: "avgTime",
     dataIndex: "avgTime",
+    responsive: ["lg"],
   },
   {
     title: "Companies",
     key: "companies",
     dataIndex: "companies",
     render: () => <Companies />,
+    responsive: ["lg"],
   },
 ];
 
@@ -162,7 +157,7 @@ const Practice = () => {
 
   return (
     <>
-      <PageHead pageName="Practice" />
+      {/* <PageHead pageName="Practice" /> */}
       <PageWrapper>
         <div>
           <h3 className={`${styles.pageSectionTitle}`}>Learning Paths</h3>
@@ -186,6 +181,7 @@ const Practice = () => {
               );
             })}
           </div>
+          {/**@ts-ignore */}
           <Table columns={practiceTableColumn} dataSource={problemsSet} />
         </div>
       </PageWrapper>
