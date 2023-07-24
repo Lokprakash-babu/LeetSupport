@@ -11,3 +11,11 @@
 .answerContainer {
   flex: 1;
 }
+
+@media screen and (max-width: 767px) {
+  .feedbackSection {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+}

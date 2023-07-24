@@ -22,3 +22,12 @@
   flex-direction: column;
   justify-content: center;
 }
+
+@media screen and (max-width: 767px) {
+  .leftSection {
+    display: none;
+  }
+  .rightSection {
+    margin-right: 1rem;
+  }
+}

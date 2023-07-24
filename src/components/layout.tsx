@@ -1,8 +1,8 @@
 import { Layout } from "antd";
 import { AuthContextProvider } from "./Auth";
 import { useRouter } from "next/router";
-import SidebarContextProvider, { Sidebar } from "./Sidebar";
-import Header from "./Header";
+import SidebarContextProvider, { Sidebar } from "./Sidebar/Sidebar";
+import Header from "./Header/Header";
 import NotificationProvider from "./Notification";
 
 const AppLayout = ({ children }: { children: JSX.Element }) => {

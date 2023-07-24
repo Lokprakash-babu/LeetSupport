@@ -1,0 +1,27 @@
+@media screen and (max-width: 767px) {
+  .desktopMenu {
+    display: none;
+  }
+  .mobileMenu {
+    display: block;
+  }
+}
+
+@media screen and (min-width: 768px) {
+  .desktopMenu {
+    display: block;
+  }
+  .mobileMenu {
+    display: none;
+  }
+}
+
+.mobileNavItem {
+  margin-bottom: 0.25rem;
+  border-bottom: 1px solid #e0e0e0;
+  padding: 0.5rem;
+}
+
+.mobileNavItem:last-child {
+  border: none;
+}

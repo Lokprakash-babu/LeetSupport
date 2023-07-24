@@ -9,7 +9,7 @@ import { Layout, Menu } from "antd";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useState, createContext, useContext, CSSProperties } from "react";
-
+import styles from "./Sidebar.module.css";
 export interface ISidebarContext {
   collapseSidebar?: () => void;
   expandSidebar?: () => void;
@@ -101,6 +101,8 @@ export const Sidebar = () => {
       onCollapse={(value) => {
         setSidebarOpen?.(!value);
       }}
+      className={styles.sidebar}
+      breakpoint="xl"
     >
       <Menu
         theme="dark"

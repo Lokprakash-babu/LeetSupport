@@ -50,7 +50,25 @@ const PaginatedTable = ({
         maxHeight: maxHeight,
       }}
     >
-      <table className="table">
+      <div className="mobileTable">
+        {data?.map((submission) => {
+          return (
+            <>
+              <div key={submission.id} className={"mobileTableItem"}>
+                {columnConfig.map((item) => {
+                  return (
+                    <div key={item.key} className="mobileColumn">
+                      <span className="mobileTitle">{item.title}:</span>{" "}
+                      {item.render(submission)}
+                    </div>
+                  );
+                })}
+              </div>
+            </>
+          );
+        })}
+      </div>
+      <table className="table paginatedTable">
         <thead>
           <tr>
             {columnConfig.map((item) => {
