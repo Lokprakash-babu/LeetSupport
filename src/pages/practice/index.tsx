@@ -1,7 +1,6 @@
 import ComingSoon, {
   IComingSoonCard,
 } from "@/components/ComingSoon/ComingSoon";
-import PageHead from "@/components/PageHead/PageHead";
 import RenderPracticeChip, {
   practiceCategory,
 } from "@/components/RenderPracticeChip";
@@ -13,7 +12,6 @@ import Companies from "@/components/CompaniesTag";
 import FilterTag from "@/components/FilterTag/FilterTag";
 import Link from "next/link";
 import { useSidebarContext } from "@/components/Sidebar/Sidebar";
-import { requireAuth } from "@/utils/requireAuth";
 import { useAuth } from "@/components/Auth";
 import Loader from "@/components/Loader";
 import { useRouter } from "next/router";

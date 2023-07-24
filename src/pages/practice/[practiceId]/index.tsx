@@ -17,10 +17,8 @@ import Error from "@/components/Error";
 import { problems } from "@/constants/problems";
 import { chatSubmissionHandler } from "@/utils/chatSubmissionHandler";
 import Loader from "@/components/Loader";
-import Unauthenticated from "@/components/Unauthenticated";
 import SubmissionsTable from "@/components/Submission/SubmissionsTable";
 import Illustration from "@/components/Illustrations/Illustration";
-import { requireAuth } from "@/utils/requireAuth";
 
 export interface ISubmissionHandler {
   chat?: IChatMessages[];

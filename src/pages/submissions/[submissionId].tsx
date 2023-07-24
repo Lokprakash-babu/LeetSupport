@@ -7,13 +7,20 @@ import Feedback from "@/components/Submission/Feedback";
 import { problems } from "@/constants/problems";
 import { GET_SUBMISSION } from "@/graphql/queries";
 import { useQuery } from "@/hooks/useQuery";
-import { useRouter } from "next/router";
 import { useEffect } from "react";
 import styles from "@styles/[submissionId].module.css";
 import ChatMessenger from "@/components/AnswerSection/ChatSection/ChatMessenger";
 import Loader from "@/components/Loader";
-import { requireAuth } from "@/utils/requireAuth";
 import { useAuth } from "@/components/Auth";
+import { useRouter } from "next/router";
+
+const MountUser = () => {
+  const router = useRouter();
+  useEffect(() => {
+    router.replace("/user");
+  }, []);
+  return null;
+};
 const SubmissionDetails = () => {
   const router = useRouter();
   const { submissionId } = router.query;
@@ -31,8 +38,7 @@ const SubmissionDetails = () => {
   }, [submissionId]);
 
   if (!authenticatedUser) {
-    router.replace("/user");
-    return null;
+    return <MountUser />;
   }
 
   if (authLoading || loading) {
