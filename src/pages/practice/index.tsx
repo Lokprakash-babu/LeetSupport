@@ -14,6 +14,9 @@ import FilterTag from "@/components/FilterTag/FilterTag";
 import Link from "next/link";
 import { useSidebarContext } from "@/components/Sidebar/Sidebar";
 import { requireAuth } from "@/utils/requireAuth";
+import { useAuth } from "@/components/Auth";
+import Loader from "@/components/Loader";
+import { useRouter } from "next/router";
 
 const practiceTableColumn = [
   {
@@ -114,7 +117,11 @@ const comingSoonInfo: IComingSoonCard[] = [
 
 const Practice = () => {
   const [activeFilterTag, setActiveFilterTag] = useState("all");
-
+  const { authLoading, authenticatedUser } = useAuth();
+  const router = useRouter();
+  useEffect(() => {
+    expandSidebar?.();
+  }, []);
   const { expandSidebar } = useSidebarContext();
 
   const FilterTagConfig = [
@@ -144,9 +151,6 @@ const Practice = () => {
     },
   ];
 
-  useEffect(() => {
-    expandSidebar?.();
-  }, []);
   const problemsSet = useMemo(() => {
     return activeFilterTag === "all"
       ? practiceProblems
@@ -155,6 +159,13 @@ const Practice = () => {
         );
   }, [activeFilterTag]);
 
+  if (authLoading) {
+    return <Loader />;
+  }
+  if (!authenticatedUser) {
+    router.replace("/user");
+    return null;
+  }
   return (
     <>
       {/* <PageHead pageName="Practice" /> */}
@@ -190,4 +201,3 @@ const Practice = () => {
 };
 
 export default Practice;
-export const getServerSideProps = requireAuth;

@@ -13,10 +13,11 @@ import styles from "@styles/[submissionId].module.css";
 import ChatMessenger from "@/components/AnswerSection/ChatSection/ChatMessenger";
 import Loader from "@/components/Loader";
 import { requireAuth } from "@/utils/requireAuth";
+import { useAuth } from "@/components/Auth";
 const SubmissionDetails = () => {
   const router = useRouter();
   const { submissionId } = router.query;
-
+  const { authenticatedUser, authLoading } = useAuth();
   const { data, error, loading, queryHandler } = useQuery(GET_SUBMISSION);
 
   useEffect(() => {
@@ -29,11 +30,16 @@ const SubmissionDetails = () => {
     }
   }, [submissionId]);
 
+  if (!authenticatedUser) {
+    router.replace("/user");
+    return null;
+  }
+
+  if (authLoading || loading) {
+    return <Loader />;
+  }
   if (error) {
     return <Error />;
-  }
-  if (loading) {
-    return <Loader />;
   }
   if (!submissionId || !data) {
     return <NotFound />;
@@ -58,6 +64,7 @@ const SubmissionDetails = () => {
 
   const chatResponse =
     category === "chat" ? jsonResponse.response.slice(2) : [];
+
   return (
     <>
       <PageHead
@@ -95,4 +102,3 @@ const SubmissionDetails = () => {
 };
 
 export default SubmissionDetails;
-export const getServerSideProps = requireAuth;

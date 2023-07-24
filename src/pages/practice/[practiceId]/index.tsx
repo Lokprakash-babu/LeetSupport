@@ -120,7 +120,7 @@ const tabItems = [
 const PracticeDetails = () => {
   const router = useRouter();
   const { practiceId, tab = "description" } = router.query;
-
+  const { authenticatedUser, authLoading } = useAuth();
   //@ts-ignore
   const practiceProblem = problems[practiceId];
   const { collapseSidebar } = useSidebarContext();
@@ -136,7 +136,13 @@ const PracticeDetails = () => {
       router.push(`/practice/${practiceId}?tab=description`);
     }
   }, [practiceId]);
-
+  if (authLoading) {
+    return <Loader />;
+  }
+  if (!authenticatedUser) {
+    router.replace("/user");
+    return null;
+  }
   if (!practiceProblem) {
     return <NotFound />;
   }
@@ -188,4 +194,3 @@ const PracticeDetails = () => {
   );
 };
 export default PracticeDetails;
-export const getServerSideProps = requireAuth;

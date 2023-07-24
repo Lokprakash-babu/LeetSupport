@@ -1,16 +1,42 @@
+import { useAuth } from "@/components/Auth";
 import Auth from "@/components/Auth/Auth";
-import { requireAuth } from "@/utils/requireAuth";
+import Loader from "@/components/Loader";
 import styles from "@styles/user.module.css";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
-const User = ({ user }: { user: any }) => {
+const MountPractice = () => {
   const router = useRouter();
   useEffect(() => {
-    if (user) {
-      router.replace("/practice");
-    }
+    router.replace("/practice");
   }, []);
+  return null;
+};
+const User = () => {
+  const { isUserLoggedIn, authenticatedUser, setAuthenticatedUser } = useAuth();
+  const [isLoading, setIsLoading] = useState(false);
+  const whoAmI = async () => {
+    try {
+      setIsLoading(true);
+      await isUserLoggedIn?.();
+      setIsLoading?.(false);
+    } catch (err) {
+      setIsLoading?.(false);
+      setAuthenticatedUser?.(null);
+    }
+  };
+
+  useEffect(() => {
+    whoAmI();
+  }, []);
+
+  if (isLoading) {
+    return <Loader />;
+  }
+
+  if (authenticatedUser?.username && !isLoading) {
+    return <MountPractice />;
+  }
   return (
     <div className={styles.userContainer}>
       <div className={`${styles.leftSection}`}></div>
@@ -22,4 +48,3 @@ const User = ({ user }: { user: any }) => {
 };
 
 export default User;
-export const getServerSideProps = requireAuth;
