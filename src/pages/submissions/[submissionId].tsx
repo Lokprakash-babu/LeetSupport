@@ -37,10 +37,6 @@ const SubmissionDetails = () => {
     }
   }, [submissionId]);
 
-  if (!authenticatedUser) {
-    return <MountUser />;
-  }
-
   if (authLoading || loading) {
     return <Loader />;
   }
@@ -49,6 +45,9 @@ const SubmissionDetails = () => {
   }
   if (!submissionId || !data) {
     return <NotFound />;
+  }
+  if (!authenticatedUser?.username) {
+    return <MountUser />;
   }
   const {
     data: {
