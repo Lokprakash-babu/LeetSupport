@@ -34,11 +34,14 @@ const SubmissionDetails = () => {
   if (error) {
     return <Error />;
   }
-  if ((!submissionId || !data || !data.getSUBMISSION) && !loading) {
+  if (!submissionId || !data) {
     return <NotFound backRoute="/submissions" backText="Back to Submissions" />;
   }
 
-  console.log("data", data);
+  if (!data?.data?.getSUBMISSION?.id) {
+    return <NotFound backRoute="/submissions" backText="Back to Submissions" />;
+  }
+
   const {
     data: {
       getSUBMISSION: {
