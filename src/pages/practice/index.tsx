@@ -5,14 +5,13 @@ import RenderPracticeChip, {
   practiceCategory,
 } from "@/components/RenderPracticeChip";
 import { Table } from "antd";
-import React, { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import styles from "@styles/practice.module.css";
 import PageWrapper from "@/components/PageWrapper/PageWrapper";
 import Companies from "@/components/CompaniesTag";
 import FilterTag from "@/components/FilterTag/FilterTag";
 import Link from "next/link";
 import { useSidebarContext } from "@/components/Sidebar/Sidebar";
-import { useAuth } from "@/components/Auth";
 import Loader from "@/components/Loader";
 import { useRouter } from "next/router";
 
@@ -115,7 +114,6 @@ const comingSoonInfo: IComingSoonCard[] = [
 
 const Practice = () => {
   const [activeFilterTag, setActiveFilterTag] = useState("all");
-  const { authLoading, authenticatedUser } = useAuth();
   const router = useRouter();
   useEffect(() => {
     expandSidebar?.();
@@ -157,16 +155,8 @@ const Practice = () => {
         );
   }, [activeFilterTag]);
 
-  if (authLoading) {
-    return <Loader />;
-  }
-  if (!authenticatedUser) {
-    router.replace("/user");
-    return null;
-  }
   return (
     <>
-      {/* <PageHead pageName="Practice" /> */}
       <PageWrapper>
         <div>
           <h3 className={`${styles.pageSectionTitle}`}>Learning Paths</h3>

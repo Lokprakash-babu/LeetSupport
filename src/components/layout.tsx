@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 import SidebarContextProvider, { Sidebar } from "./Sidebar/Sidebar";
 import Header from "./Header/Header";
 import NotificationProvider from "./Notification";
+import AuthLayoutWrapper from "./AuthLayoutWrapper";
 
 const AppLayout = ({ children }: { children: JSX.Element }) => {
   const router = useRouter();
@@ -21,27 +22,27 @@ const AppLayout = ({ children }: { children: JSX.Element }) => {
     default:
       return (
         <AuthContextProvider>
-          <SidebarContextProvider>
-            <NotificationProvider>
-              <Layout style={{ background: "white" }}>
-                <Header />
-                <Layout hasSider>
-                  <Sidebar />
-                  {/* <Layout.Content> */}
-                  <Layout
-                    style={{
-                      background: "white",
-                      overflow: "auto",
-                      height: "calc(100vh - 56px)",
-                    }}
-                  >
-                    {children}
+          <AuthLayoutWrapper>
+            <SidebarContextProvider>
+              <NotificationProvider>
+                <Layout style={{ background: "white" }}>
+                  <Header />
+                  <Layout hasSider>
+                    <Sidebar />
+                    <Layout
+                      style={{
+                        background: "white",
+                        overflow: "auto",
+                        height: "calc(100vh - 56px)",
+                      }}
+                    >
+                      {children}
+                    </Layout>
                   </Layout>
-                  {/* </Layout.Content> */}
                 </Layout>
-              </Layout>
-            </NotificationProvider>
-          </SidebarContextProvider>
+              </NotificationProvider>
+            </SidebarContextProvider>
+          </AuthLayoutWrapper>
         </AuthContextProvider>
       );
   }

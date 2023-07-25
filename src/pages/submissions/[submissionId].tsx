@@ -11,20 +11,11 @@ import { useEffect } from "react";
 import styles from "@styles/[submissionId].module.css";
 import ChatMessenger from "@/components/AnswerSection/ChatSection/ChatMessenger";
 import Loader from "@/components/Loader";
-import { useAuth } from "@/components/Auth";
 import { useRouter } from "next/router";
 
-const MountUser = () => {
-  const router = useRouter();
-  useEffect(() => {
-    router.replace("/user");
-  }, []);
-  return null;
-};
 const SubmissionDetails = () => {
   const router = useRouter();
   const { submissionId } = router.query;
-  const { authenticatedUser, authLoading } = useAuth();
   const { data, error, loading, queryHandler } = useQuery(GET_SUBMISSION);
 
   useEffect(() => {
@@ -37,18 +28,17 @@ const SubmissionDetails = () => {
     }
   }, [submissionId]);
 
-  if (authLoading || loading) {
+  if (loading) {
     return <Loader />;
   }
   if (error) {
     return <Error />;
   }
-  if (!submissionId || !data) {
-    return <NotFound />;
+  if ((!submissionId || !data || !data.getSUBMISSION) && !loading) {
+    return <NotFound backRoute="/submissions" backText="Back to Submissions" />;
   }
-  if (!authenticatedUser?.username) {
-    return <MountUser />;
-  }
+
+  console.log("data", data);
   const {
     data: {
       getSUBMISSION: {

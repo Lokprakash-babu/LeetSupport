@@ -1,7 +1,14 @@
 import { Button, Result } from "antd";
 import { useRouter } from "next/router";
 
-const NotFound = () => {
+export interface INotFound {
+  backRoute?: string;
+  backText?: string;
+}
+const NotFound = ({
+  backRoute = "/practice",
+  backText = "Back to Practice",
+}: INotFound) => {
   const router = useRouter();
   return (
     <Result
@@ -9,8 +16,8 @@ const NotFound = () => {
       title="404"
       subTitle="Sorry, the page you visited does not exist."
       extra={
-        <Button type="primary" onClick={() => router.replace("/practice")}>
-          Back to Practice
+        <Button type="primary" onClick={() => router.replace(backRoute)}>
+          {backText}
         </Button>
       }
     />
