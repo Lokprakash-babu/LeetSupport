@@ -40,7 +40,16 @@ const User = () => {
   return (
     <div className={styles.userContainer}>
       <div className={`${styles.leftSection}`}></div>
+
       <div className={`${styles.rightSection}`}>
+        <h1
+          style={{
+            textAlign: "center",
+            marginBottom: "1rem",
+          }}
+        >
+          Leetsupport
+        </h1>
         <Auth />
       </div>
     </div>
