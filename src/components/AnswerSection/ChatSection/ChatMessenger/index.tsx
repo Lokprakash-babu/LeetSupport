@@ -57,6 +57,14 @@ const ChatMessenger = ({
     },
     [systemChatMessage, initialUserMessage]
   );
+  const resetChat = () => {
+    setChatMessages([
+      { ...systemChatMessage },
+      { ...initialUserMessage },
+      ...(defaultValues ? defaultValues : []),
+    ]);
+    initiateChat();
+  };
   const { warningNotification } = useNotificationContext();
   if (error) {
     return <Error />;
@@ -81,6 +89,7 @@ const ChatMessenger = ({
           }
         }}
         isReadOnlyMode={isReadOnly}
+        resetChat={resetChat}
       />
       <ChatMessagesContainer
         chatMessages={chatMessages}

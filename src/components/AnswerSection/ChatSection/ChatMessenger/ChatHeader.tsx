@@ -6,11 +6,13 @@ export interface IChatHeader {
   customerName: string;
   onEndChat?: () => void;
   isReadOnlyMode?: boolean;
+  resetChat?: () => void;
 }
 const ChatHeader = ({
   customerName,
   onEndChat,
   isReadOnlyMode,
+  resetChat,
 }: IChatHeader) => {
   return (
     <div className={styles.chatHeader}>
@@ -20,20 +22,30 @@ const ChatHeader = ({
           <h4>{customerName}</h4>
         </div>
         {!isReadOnlyMode && (
-          <Popconfirm
-            title="Are you sure you want to end chat?"
-            okText="Yes"
-            cancelText="No"
-            onConfirm={onEndChat}
-            placement="bottom"
-            cancelButtonProps={{
-              danger: true,
-            }}
-          >
-            <Button danger type="link">
-              End Chat
+          <div>
+            <Button
+              type="link"
+              onClick={() => {
+                resetChat && resetChat();
+              }}
+            >
+              Reset Chat
             </Button>
-          </Popconfirm>
+            <Popconfirm
+              title="Are you sure you want to end chat?"
+              okText="Yes"
+              cancelText="No"
+              onConfirm={onEndChat}
+              placement="bottom"
+              cancelButtonProps={{
+                danger: true,
+              }}
+            >
+              <Button danger type="link">
+                End Chat
+              </Button>
+            </Popconfirm>
+          </div>
         )}
       </div>
     </div>
