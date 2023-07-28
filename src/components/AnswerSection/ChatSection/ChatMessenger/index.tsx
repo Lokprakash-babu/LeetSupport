@@ -90,6 +90,7 @@ const ChatMessenger = ({
         }}
         isReadOnlyMode={isReadOnly}
         resetChat={resetChat}
+        isChatLoading={isChatLoading}
       />
       <ChatMessagesContainer
         chatMessages={chatMessages}
